@@ -5,11 +5,11 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 public class DusterGrab : MonoBehaviour
 {
     public WorkshopOwnerSpeaker workshopOwner;
-    public SnailDusting snail;
+    public SnailGrab snail;
 
     [Header("Abstaub-Einstellungen")]
-    public float minMoveDistance = 0.1f; 
-    public int requiredDustings = 5; 
+    public float minMoveDistance = 0.1f;
+    public int requiredDustings = 5;
 
     private XRGrabInteractable grabInteractable;
     private bool isBeingUsed = false;
@@ -44,14 +44,14 @@ public class DusterGrab : MonoBehaviour
             if (dustingCounter >= requiredDustings)
             {
                 snail.WakeUp();
-                isBeingUsed = false; 
+                isBeingUsed = false;
             }
         }
     }
 
     private bool DetectDustingMotion()
     {
-        return Mathf.Abs(transform.position.x - lastPosition.x) > minMoveDistance;
+        return Vector3.Distance(transform.position, lastPosition) > minMoveDistance;
     }
 
     private void OnTriggerEnter(Collider other)

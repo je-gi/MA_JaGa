@@ -7,6 +7,8 @@ TagManager:
   - Anchor
   - Snail
   - cleaningTool
+  - Button
+  - Plug
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Snail
   - 
   - 
   - 
