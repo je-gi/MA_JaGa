@@ -11,6 +11,8 @@ TagManager:
   - Plug
   - Blue_Cube
   - Red_Cube
+  - Sprayable
+  - Shrinkable
   layers:
   - Default
   - TransparentFX
