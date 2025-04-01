@@ -6,6 +6,13 @@ public class Spraycan : MonoBehaviour
     public float detectionRadius = 5f;
     public Material newMaterial;
 
+    private bool isSpraySuccessful = false;
+
+    public bool IsSpraySuccessful() 
+    {
+        return isSpraySuccessful;
+    }
+
     public void Spray()
     {
         GameObject targetObject = GetTargetInProximity();
@@ -16,7 +23,12 @@ public class Spraycan : MonoBehaviour
             if (targetRenderer != null && newMaterial != null)
             {
                 targetRenderer.material = newMaterial;
+                isSpraySuccessful = true; 
             }
+        }
+        else
+        {
+            isSpraySuccessful = false; 
         }
     }
 
@@ -27,7 +39,6 @@ public class Spraycan : MonoBehaviour
         foreach (GameObject target in targetObjects)
         {
             float distance = Vector3.Distance(transform.position, target.transform.position);
-
             if (distance <= detectionRadius)
             {
                 return target;

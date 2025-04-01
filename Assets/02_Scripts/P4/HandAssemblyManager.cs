@@ -8,6 +8,8 @@ public class HandAssemblyManager : MonoBehaviour
     public List<XRSocketInteractor> sockets;
     public List<GameObject> objectsToHide;
     public List<GameObject> objectsToShow;
+    public Spraycan sprayScript;
+    public Shrinkgun shrinkScript;
 
     private int currentSocketIndex = 0;
     private bool isMinigameCompleted = false;
@@ -27,9 +29,9 @@ public class HandAssemblyManager : MonoBehaviour
 
     private void InitializeSockets()
     {
-        for (int i = 0; i < sockets.Count; i++)
+        for (int i = 1; i < sockets.Count; i++)
         {
-            sockets[i].socketActive = (i == 0);
+            sockets[i].socketActive = false;
         }
     }
 
@@ -37,18 +39,28 @@ public class HandAssemblyManager : MonoBehaviour
     {
         if (currentSocketIndex >= sockets.Count) return;
 
-        if (sockets[currentSocketIndex].hasSelection)
+        if (currentSocketIndex == 0 && sockets[0].hasSelection)
         {
             currentSocketIndex++;
-            if (currentSocketIndex < sockets.Count)
-            {
-                sockets[currentSocketIndex].socketActive = true;
-            }
-            else
-            {
-                isMinigameCompleted = true;
-                OnMinigameCompleted();
-            }
+            sockets[1].socketActive = true;
+        }
+
+        if (currentSocketIndex == 1 && sockets[1].hasSelection)
+        {
+            currentSocketIndex++;
+            sockets[2].socketActive = true;
+        }
+
+        if (currentSocketIndex == 2 && sockets[2].hasSelection && sprayScript.IsSpraySuccessful())
+        {
+            currentSocketIndex++;
+            sockets[3].socketActive = true;
+        }
+
+        if (currentSocketIndex == 3 && sockets[3].hasSelection && shrinkScript.IsShrinkSuccessful())
+        {
+            isMinigameCompleted = true;
+            OnMinigameCompleted();
         }
     }
 
