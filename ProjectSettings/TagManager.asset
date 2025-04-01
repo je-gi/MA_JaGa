@@ -9,6 +9,8 @@ TagManager:
   - cleaningTool
   - Button
   - Plug
+  - Blue_Cube
+  - Red_Cube
   layers:
   - Default
   - TransparentFX
