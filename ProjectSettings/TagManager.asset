@@ -31,6 +31,10 @@ TagManager:
   - EyeGreenSmall
   - EyePurpleLarge
   - EyePurpleSmall
+  - Variant01
+  - Variant02
+  - Variant03
+  - Variant04
   layers:
   - Default
   - TransparentFX
