@@ -33,6 +33,8 @@ public class EyeFusion : MonoBehaviour
 
     private List<GameObject> eyesInTrigger = new List<GameObject>();
 
+    public GlassesShow glassesShow;
+
     private void OnTriggerEnter(Collider other)
     {
         if (IsValidEye(other.tag))
@@ -89,7 +91,12 @@ public class EyeFusion : MonoBehaviour
 
         if (prefabToSpawn != null)
         {
-            Instantiate(prefabToSpawn, fusionPoint.position, Quaternion.identity);
+            GameObject newEye = Instantiate(prefabToSpawn, fusionPoint.position, Quaternion.identity);
+
+            if (glassesShow != null)
+            {
+                glassesShow.RegisterEyeObject(newEye);
+            }
         }
         else
         {

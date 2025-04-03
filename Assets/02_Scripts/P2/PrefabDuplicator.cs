@@ -15,6 +15,8 @@ public class PrefabDuplicator : MonoBehaviour
 
     private GameObject selectedPrefab;
 
+    public GlassesShow glassesShow;
+
     private void Start()
     {
         selectedPrefab = defaultPrefab;
@@ -55,7 +57,12 @@ public class PrefabDuplicator : MonoBehaviour
                 selectedPrefab = defaultPrefab;
             }
 
-            Instantiate(selectedPrefab, spawnPoint.position, spawnPoint.rotation);
+            GameObject spawnedObject = Instantiate(selectedPrefab, spawnPoint.position, spawnPoint.rotation);
+
+            if (glassesShow != null)
+            {
+                glassesShow.RegisterEyeObject(spawnedObject);
+            }
         }
     }
 }
