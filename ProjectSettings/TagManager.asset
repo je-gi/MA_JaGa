@@ -13,6 +13,24 @@ TagManager:
   - Red_Cube
   - Sprayable
   - Shrinkable
+  - EyeYellowSmall
+  - EyeRedLarge
+  - EyeBlueLarge
+  - EyeYellowLarge
+  - EyeRedSmall
+  - EyeBlueSmall
+  - EyeBlueMedium
+  - EyeRedMedium
+  - EyeYellowMedium
+  - EyeGreenMedium
+  - EyePurpleMedium
+  - EyeOrangeMedium
+  - EyeOrangeSmall
+  - EyeOrangeLarge
+  - EyeGreenLarge
+  - EyeGreenSmall
+  - EyePurpleLarge
+  - EyePurpleSmall
   layers:
   - Default
   - TransparentFX
