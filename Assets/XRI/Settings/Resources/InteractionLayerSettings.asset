@@ -27,10 +27,10 @@ MonoBehaviour:
   - 'P1: Ear'
   - 'P1: AudioObject'
   - 'LSI: Card'
-  - 
-  - 
-  - 
-  - 
+  - 'P1: Part'
+  - 'P2: Part'
+  - 'P3: Part'
+  - 'P4: Part'
   - 
   - 
   - 
