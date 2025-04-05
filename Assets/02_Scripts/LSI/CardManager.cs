@@ -1,6 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
@@ -11,9 +11,11 @@ public class CardManager : MonoBehaviour
     public GameObject nextButton;
 
     private int currentSetIndex = 0;
+    private LearningTypeCalculator learningTypeCalculator;
 
     void Start()
     {
+        learningTypeCalculator = Object.FindFirstObjectByType<LearningTypeCalculator>();
         SpawnSet(currentSetIndex);
     }
 
@@ -34,13 +36,18 @@ public class CardManager : MonoBehaviour
     {
         if (AreAllSocketsFilled())
         {
+            learningTypeCalculator.AddScores(sockets);
             RemoveCardsFromSockets();
-
             currentSetIndex++;
 
             if (currentSetIndex < setObjects.Length)
             {
                 SpawnSet(currentSetIndex);
+            }
+            else
+            {
+                string finalLearningType = learningTypeCalculator.CalculateFinalLearningType();
+                learningTypeCalculator.ShowLearningTypeObject(finalLearningType);
             }
         }
     }
