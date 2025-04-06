@@ -28,9 +28,6 @@ public class P1Manager : MonoBehaviour
     [Header("Socket Checker")]
     public SocketChecking socketChecker;
 
-    [Header("Puzzle Completion Handler")]
-    public PuzzleCompleteObjects puzzleCompleteObjects;
-
     [Header("Objects To Track")]
     public GameObject objectToTrack1;
     public GameObject objectToTrack2;
@@ -48,6 +45,9 @@ public class P1Manager : MonoBehaviour
 
     [Header("External Script")]
     public ShowObjectsWhenSocketsFilled showObjectsScript;
+
+    [Header("DisableGrabAndMakeKinematic Script")]
+    public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
     [Header("Debug")]
     public bool activateManually = false;
@@ -112,18 +112,11 @@ public class P1Manager : MonoBehaviour
 
     private void CheckPuzzleCompletion()
     {
-        if (BothSocketsFilled() && !puzzleCompleted)
+        if (disableGrabAndMakeKinematicOnSocket != null && disableGrabAndMakeKinematicOnSocket.IsPuzzleCompleted() && !puzzleCompleted)
         {
             PlayClip(clipOnPuzzleCompleted);
             puzzleCompleted = true;
-            puzzleCompleteObjects.HandlePuzzleCompletion();
         }
-    }
-
-    private bool BothSocketsFilled()
-    {
-        return puzzleCompleteObjects.socket1.GetOldestInteractableSelected() != null &&
-               puzzleCompleteObjects.socket2.GetOldestInteractableSelected() != null;
     }
 
     private bool IsCameraInTrigger()
