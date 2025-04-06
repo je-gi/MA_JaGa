@@ -1,6 +1,5 @@
-using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine;
 
 public class ShowObjectsWhenSocketsFilled : MonoBehaviour
 {
@@ -11,6 +10,7 @@ public class ShowObjectsWhenSocketsFilled : MonoBehaviour
     public GameObject objectToShow2;
 
     private bool alreadyShown = false;
+    public bool AlreadyShown => alreadyShown;
 
     void Update()
     {

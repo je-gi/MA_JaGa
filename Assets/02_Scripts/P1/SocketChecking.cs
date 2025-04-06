@@ -12,10 +12,9 @@ public class SocketChecking : MonoBehaviour
     }
 
     public SocketObjectPair[] socketObjectPairs;
-    public AudioSource successSound;
 
-    public delegate void SuccessEvent();
-    public event SuccessEvent OnSuccess;
+    public delegate void PuzzleStatusEvent(bool isCompleted);
+    public event PuzzleStatusEvent OnPuzzleStatusChanged;
 
     public void socketCheck()
     {
@@ -38,16 +37,15 @@ public class SocketChecking : MonoBehaviour
             }
         }
 
-        if (allCorrect && successSound != null)
+        if (allCorrect)
         {
-            Debug.Log("Alle Objekte korrekt. Spiele Sound ab.");
-            successSound.Play();
-
-            OnSuccess?.Invoke();
+            Debug.Log("Alle Objekte korrekt.");
+            OnPuzzleStatusChanged?.Invoke(true); 
         }
         else
         {
             Debug.Log("SocketCheck: Noch nicht korrekt oder unvollständig.");
+            OnPuzzleStatusChanged?.Invoke(false);
         }
     }
 }
