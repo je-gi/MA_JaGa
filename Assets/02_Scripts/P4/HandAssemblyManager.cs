@@ -2,92 +2,180 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using TMPro;
 
 public class HandAssemblyManager : MonoBehaviour
 {
-    public List<XRSocketInteractor> sockets;
-    public List<GameObject> objectsToHide;
-    public List<GameObject> objectsToShow;
-    public Spraycan sprayScript;
-    public Shrinkgun shrinkScript;
+    [Header("Hand 1")]
+    public List<XRSocketInteractor> hand1Sockets;
+    public List<GameObject> hand1Parts;
+    public GameObject hand1Model;
+    public Spraycan spray1;
+    public Shrinkgun shrink1;
 
-    private int currentSocketIndex = 0;
-    private bool isMinigameCompleted = false;
+    [Header("Hand 2")]
+    public List<XRSocketInteractor> hand2Sockets;
+    public List<GameObject> hand2Parts;
+    public GameObject hand2Model;
+    public Spraycan spray2;
+    public Shrinkgun shrink2;
+
+    [Header("SocketChecker")]
+    public DisableGrabAndMakeKinematicOnSocket socketCheckerScript;
+
+    [Header("UI Text Management")]
+    public TextMeshProUGUI uiText;
+    private Dictionary<string, string> objectTextDict = new Dictionary<string, string>(); 
+
+    private int hand1Step = 0;
+    private int hand2Step = 0;
+    private bool hand1Done = false;
+    private bool hand2Started = false;
+    private bool hand2Done = false;
 
     private void Start()
     {
-        InitializeSockets();
+        InitSockets(hand1Sockets);
+        InitSockets(hand2Sockets);
+        if (hand1Sockets.Count > 0) hand1Sockets[0].socketActive = true;
+        if (hand1Parts.Count > 0) hand1Parts[0].SetActive(true);
+        SetActiveList(hand2Parts, false);
     }
 
     private void Update()
     {
-        if (!isMinigameCompleted)
+        HandleHand1();
+        if (!hand2Started && IsAnySocketOccupied()) StartHand2();
+        if (hand2Started) HandleHand2();
+    }
+
+    private void InitSockets(List<XRSocketInteractor> sockets)
+    {
+        foreach (var s in sockets)
+            if (s != null) s.socketActive = false;
+    }
+
+    private void SetActiveList(List<GameObject> objects, bool active)
+    {
+        foreach (var obj in objects)
+            if (obj != null) obj.SetActive(active);
+    }
+
+    private void HandleHand1()
+    {
+        if (hand1Done) return;
+
+        if (hand1Step == 0 && hand1Sockets[0].hasSelection)
         {
-            CheckSocketCompletion();
+            hand1Step++;
+            ActivateSocketAndPart(hand1Sockets, hand1Parts, hand1Step);
+        }
+        else if (hand1Step == 1 && hand1Sockets[1].hasSelection && spray1.IsSpraySuccessful())
+        {
+            hand1Step++;
+            ActivateSocketAndPart(hand1Sockets, hand1Parts, hand1Step);
+        }
+        else if (hand1Step == 2 && hand1Sockets[2].hasSelection && shrink1.IsShrinkSuccessful())
+        {
+            hand1Step++;
+            ActivateSocketAndPart(hand1Sockets, hand1Parts, hand1Step);
+        }
+        else if (hand1Step == 3 && hand1Sockets[3].hasSelection)
+        {
+            FinalizeHand(hand1Sockets, hand1Parts, hand1Model);
+            hand1Done = true;
+            spray1.ResetSpray();
+            shrink1.ResetShrink();
         }
     }
 
-    private void InitializeSockets()
+    private void HandleHand2()
     {
-        for (int i = 1; i < sockets.Count; i++)
+        if (hand2Done) return;
+
+        if (hand2Step == 0 && hand2Sockets[0].hasSelection)
         {
-            sockets[i].socketActive = false;
+            hand2Step++;
+            ActivateSocketAndPart(hand2Sockets, hand2Parts, hand2Step);
+        }
+        else if (hand2Step == 1 && hand2Sockets[1].hasSelection && spray2.IsSpraySuccessful())
+        {
+            hand2Step++;
+            ActivateSocketAndPart(hand2Sockets, hand2Parts, hand2Step);
+        }
+        else if (hand2Step == 2 && hand2Sockets[2].hasSelection && shrink2.IsShrinkSuccessful())
+        {
+            hand2Step++;
+            ActivateSocketAndPart(hand2Sockets, hand2Parts, hand2Step);
+        }
+        else if (hand2Step == 3 && hand2Sockets[3].hasSelection)
+        {
+            FinalizeHand(hand2Sockets, hand2Parts, hand2Model);
+            hand2Done = true;
         }
     }
 
-    private void CheckSocketCompletion()
+    private void ActivateSocketAndPart(List<XRSocketInteractor> sockets, List<GameObject> parts, int index)
     {
-        if (currentSocketIndex >= sockets.Count) return;
+        if (index < sockets.Count) sockets[index].socketActive = true;
+        if (index < parts.Count) parts[index].SetActive(true);
+    }
 
-        if (currentSocketIndex == 0 && sockets[0].hasSelection)
+    private void FinalizeHand(List<XRSocketInteractor> sockets, List<GameObject> parts, GameObject model)
+    {
+        foreach (var socket in sockets)
+            socket.socketActive = false;
+
+        SetActiveList(parts, false);
+
+        if (model != null)
         {
-            currentSocketIndex++;
-            sockets[1].socketActive = true;
+            model.SetActive(true);
         }
 
-        if (currentSocketIndex == 1 && sockets[1].hasSelection)
-        {
-            currentSocketIndex++;
-            sockets[2].socketActive = true;
-        }
+        TriggerObjectDisplayUI triggerTextManager = Object.FindFirstObjectByType<TriggerObjectDisplayUI>();
 
-        if (currentSocketIndex == 2 && sockets[2].hasSelection && sprayScript.IsSpraySuccessful())
+        if (triggerTextManager != null)
         {
-            currentSocketIndex++;
-            sockets[3].socketActive = true;
-        }
-
-        if (currentSocketIndex == 3 && sockets[3].hasSelection && shrinkScript.IsShrinkSuccessful())
-        {
-            isMinigameCompleted = true;
-            OnMinigameCompleted();
+            triggerTextManager.ClearAllText();
         }
     }
 
-    private void OnMinigameCompleted()
+
+    private bool IsAnySocketOccupied()
     {
-        HideObjects();
-        ShowObjects();
+        return socketCheckerScript != null &&
+            (
+                (socketCheckerScript.socket1Interactor != null && socketCheckerScript.socket1Interactor.hasSelection) ||
+                (socketCheckerScript.socket2Interactor != null && socketCheckerScript.socket2Interactor.hasSelection)
+            );
     }
 
-    private void HideObjects()
+    private void StartHand2()
     {
-        foreach (var obj in objectsToHide)
+        hand2Started = true;
+        SetActiveList(hand2Parts, true);
+        if (hand2Sockets.Count > 0)
+            hand2Sockets[0].socketActive = true;
+    }
+
+    public void AddTextForObject(GameObject obj, string text)
+    {
+        if (!objectTextDict.ContainsKey(obj.name))
         {
-            if (obj != null)
+            objectTextDict.Add(obj.name, text);
+            UpdateUIText();
+        }
+    }
+
+    private void UpdateUIText()
+    {
+        if (uiText != null)
+        {
+            uiText.text = "";
+            foreach (var item in objectTextDict)
             {
-                obj.SetActive(false);
-            }
-        }
-    }
-
-    private void ShowObjects()
-    {
-        foreach (var obj in objectsToShow)
-        {
-            if (obj != null)
-            {
-                obj.SetActive(true);
+                uiText.text += item.Value + "\n";
             }
         }
     }

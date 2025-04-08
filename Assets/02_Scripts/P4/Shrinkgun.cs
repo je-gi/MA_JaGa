@@ -36,6 +36,11 @@ public class Shrinkgun : MonoBehaviour
         return shrinkSuccessful;
     }
 
+    public void ResetShrink()
+    {
+        shrinkSuccessful = false; 
+    }
+
     private GameObject GetTargetInProximity()
     {
         GameObject[] targetObjects = GameObject.FindGameObjectsWithTag(targetTag);

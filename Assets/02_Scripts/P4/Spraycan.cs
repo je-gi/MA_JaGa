@@ -8,7 +8,7 @@ public class Spraycan : MonoBehaviour
 
     private bool isSpraySuccessful = false;
 
-    public bool IsSpraySuccessful() 
+    public bool IsSpraySuccessful()
     {
         return isSpraySuccessful;
     }
@@ -23,13 +23,18 @@ public class Spraycan : MonoBehaviour
             if (targetRenderer != null && newMaterial != null)
             {
                 targetRenderer.material = newMaterial;
-                isSpraySuccessful = true; 
+                isSpraySuccessful = true;
             }
         }
         else
         {
-            isSpraySuccessful = false; 
+            isSpraySuccessful = false;
         }
+    }
+
+    public void ResetSpray()
+    {
+        isSpraySuccessful = false;
     }
 
     private GameObject GetTargetInProximity()
