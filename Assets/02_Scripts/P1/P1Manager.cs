@@ -6,9 +6,6 @@ using System.Collections.Generic;
 
 public class P1Manager : MonoBehaviour
 {
-    [Header("Setup")]
-    public GameObject initialPuzzleObject;
-
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip clipIntro;
@@ -102,9 +99,6 @@ public class P1Manager : MonoBehaviour
         if (hasStarted) return;
 
         hasStarted = true;
-
-        if (initialPuzzleObject != null)
-            initialPuzzleObject.SetActive(true);
 
         if (clipIntro != null)
             PlayClip(clipIntro);
