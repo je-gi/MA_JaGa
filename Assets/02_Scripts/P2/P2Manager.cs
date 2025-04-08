@@ -8,11 +8,19 @@ public class P2Manager : MonoBehaviour
 
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
+    public bool activateManually = false;
+
     private bool puzzleCompleted = false;
     private bool hasStarted = false;
 
     void Update()
     {
+        if (activateManually && !hasStarted)
+        {
+            StartPuzzle();
+            activateManually = false;
+        }
+
         if (hasStarted && disableGrabAndMakeKinematicOnSocket != null && disableGrabAndMakeKinematicOnSocket.IsPuzzleCompleted() && !puzzleCompleted)
         {
             PlayCompletionAudio();
@@ -21,6 +29,11 @@ public class P2Manager : MonoBehaviour
     }
 
     public void StartPuzzleExternally()
+    {
+        StartPuzzle();
+    }
+
+    private void StartPuzzle()
     {
         if (hasStarted) return;
 
