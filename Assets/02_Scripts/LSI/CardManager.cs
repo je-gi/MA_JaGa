@@ -10,6 +10,8 @@ public class CardManager : MonoBehaviour
     public GameObject[] setObjects;
     public GameObject nextButton;
 
+    public event System.Action<string> OnLSICompleted;
+
     private int currentSetIndex = 0;
     private LearningTypeCalculator learningTypeCalculator;
 
@@ -47,7 +49,7 @@ public class CardManager : MonoBehaviour
             else
             {
                 string finalLearningType = learningTypeCalculator.CalculateFinalLearningType();
-                learningTypeCalculator.ShowLearningTypeObject(finalLearningType);
+                OnLSICompleted?.Invoke(finalLearningType);
             }
         }
     }

@@ -9,24 +9,23 @@ public class P2Manager : MonoBehaviour
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
     private bool puzzleCompleted = false;
-
-    void Start()
-    {
-        if (disableGrabAndMakeKinematicOnSocket == null)
-        {
-            return;
-        }
-
-        PlayStartAudio();
-    }
+    private bool hasStarted = false;
 
     void Update()
     {
-        if (disableGrabAndMakeKinematicOnSocket != null && disableGrabAndMakeKinematicOnSocket.IsPuzzleCompleted() && !puzzleCompleted)
+        if (hasStarted && disableGrabAndMakeKinematicOnSocket != null && disableGrabAndMakeKinematicOnSocket.IsPuzzleCompleted() && !puzzleCompleted)
         {
             PlayCompletionAudio();
             puzzleCompleted = true;
         }
+    }
+
+    public void StartPuzzleExternally()
+    {
+        if (hasStarted) return;
+
+        hasStarted = true;
+        PlayStartAudio();
     }
 
     private void PlayStartAudio()
@@ -48,4 +47,6 @@ public class P2Manager : MonoBehaviour
             audioSource.Play();
         }
     }
+
+    public bool IsPuzzleCompleted => puzzleCompleted;
 }
