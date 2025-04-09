@@ -4,6 +4,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class PrefabDuplicator : MonoBehaviour
 {
+    [Header("Sockets & Prefabs")]
     public XRSocketInteractor mainSocketInteractor;
     public XRSocketInteractor variantSocketInteractor;
     public Transform spawnPoint;
@@ -15,7 +16,13 @@ public class PrefabDuplicator : MonoBehaviour
 
     private GameObject selectedPrefab;
 
+    [Header("Optional: GlassesShow (falls benötigt)")]
     public GlassesShow glassesShow;
+
+    [Header("Audio beim ersten Spawn")]
+    public AudioSource audioSource;
+    public AudioClip firstSpawnAudio;
+    private bool hasSpawnedOnce = false;
 
     private void Start()
     {
@@ -59,10 +66,28 @@ public class PrefabDuplicator : MonoBehaviour
 
             GameObject spawnedObject = Instantiate(selectedPrefab, spawnPoint.position, spawnPoint.rotation);
 
+            if (!hasSpawnedOnce)
+            {
+                PlayAudio();
+                hasSpawnedOnce = true;
+            }
+
             if (glassesShow != null)
             {
                 glassesShow.RegisterEyeObject(spawnedObject);
             }
+        }
+    }
+
+    private void PlayAudio()
+    {
+        if (audioSource != null && firstSpawnAudio != null)
+        {
+            if (audioSource.isPlaying)
+                audioSource.Stop();
+
+            audioSource.clip = firstSpawnAudio;
+            audioSource.Play();
         }
     }
 }
