@@ -176,4 +176,9 @@ public class P1Manager : MonoBehaviour
     {
         StartPuzzle();
     }
+
+    public bool IsCompletionAudioPlaying()
+    {
+        return audioSource.isPlaying;
+    }
 }

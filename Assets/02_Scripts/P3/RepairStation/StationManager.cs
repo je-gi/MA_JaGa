@@ -1,17 +1,21 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class StationManager : MonoBehaviour
 {
+    [Header("Panels & Minispiele")]
     public GameObject[] stationPanels;
     public GameObject[] miniGames;
     public Button[] levelButtons;
 
-    // Arrays für GameObjects, die pro Minispiel ausgeblendet werden sollen
-    public GameObject[] miniGame1AdditionalObjects; // Für Minispiel 1
-    public GameObject[] miniGame2AdditionalObjects; // Für Minispiel 2
-    public GameObject[] miniGame3AdditionalObjects; // Für Minispiel 3
-    // Füge hier beliebig viele Minispiele und ihre zusätzlichen Objekte hinzu
+    [Header("Sounds")]
+    public AudioClip[] miniGameStartSounds;
+    public AudioSource audioSource;
+
+    [Header("ZusÃ¤tzliche Objekte pro Minispiel")]
+    public GameObject[] miniGame1AdditionalObjects;
+    public GameObject[] miniGame2AdditionalObjects; 
+    public GameObject[] miniGame3AdditionalObjects; 
 
     private int activeMiniGameIndex = -1;
 
@@ -24,6 +28,8 @@ public class StationManager : MonoBehaviour
     {
         if (levelButtons[index].interactable)
         {
+            PlayMiniGameSound(index); 
+
             HideStationPanels();
             ShowMiniGame(index);
         }
@@ -67,7 +73,6 @@ public class StationManager : MonoBehaviour
             miniGames[activeMiniGameIndex].SetActive(false);
             ShowStationPanels();
 
-            // Hier können wir nun je nach Minispiel die spezifischen Objekte ausblenden
             switch (activeMiniGameIndex)
             {
                 case 0:
@@ -79,7 +84,6 @@ public class StationManager : MonoBehaviour
                 case 2:
                     HideAdditionalObjects(miniGame3AdditionalObjects);
                     break;
-                    // Füge hier weitere Minispiele hinzu, falls nötig
             }
         }
     }
@@ -92,6 +96,22 @@ public class StationManager : MonoBehaviour
             {
                 if (obj != null)
                     obj.SetActive(false);
+            }
+        }
+    }
+
+    private void PlayMiniGameSound(int index)
+    {
+        if (audioSource != null && miniGameStartSounds != null && index >= 0 && index < miniGameStartSounds.Length)
+        {
+            AudioClip clip = miniGameStartSounds[index];
+            if (clip != null)
+            {
+                if (audioSource.isPlaying)
+                    audioSource.Stop();
+
+                audioSource.clip = clip;
+                audioSource.Play();
             }
         }
     }

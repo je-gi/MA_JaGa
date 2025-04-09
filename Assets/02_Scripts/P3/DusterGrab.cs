@@ -4,10 +4,12 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class DusterGrab : MonoBehaviour
 {
-    public WorkshopOwnerSpeaker workshopOwner;
-    public SnailGrab snail;
+    [Header("Audio beim ersten Grab")]
+    public AudioSource audioSource;
+    public AudioClip grabAudio;
 
-    [Header("Abstaub-Einstellungen")]
+    [Header("Snail & Abstaub-Einstellungen")]
+    public SnailGrab snail;
     public float minMoveDistance = 0.1f;
     public int requiredDustings = 5;
 
@@ -16,6 +18,7 @@ public class DusterGrab : MonoBehaviour
     private int dustingCounter = 0;
     private bool isTouchingSnail = false;
     private Vector3 lastPosition;
+    private bool grabSoundPlayed = false;
 
     private void Awake()
     {
@@ -30,7 +33,12 @@ public class DusterGrab : MonoBehaviour
             isBeingUsed = true;
             dustingCounter = 0;
             lastPosition = transform.position;
-            workshopOwner.OnDusterGrabbed();
+
+            if (!grabSoundPlayed)
+            {
+                PlayGrabSound();
+                grabSoundPlayed = true;
+            }
         }
     }
 
@@ -67,6 +75,18 @@ public class DusterGrab : MonoBehaviour
         if (other.CompareTag("Snail"))
         {
             isTouchingSnail = false;
+        }
+    }
+
+    private void PlayGrabSound()
+    {
+        if (audioSource != null && grabAudio != null)
+        {
+            if (audioSource.isPlaying)
+                audioSource.Stop();
+
+            audioSource.clip = grabAudio;
+            audioSource.Play();
         }
     }
 }

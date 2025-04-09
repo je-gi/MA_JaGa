@@ -102,4 +102,10 @@ public class P4Manager : MonoBehaviour
     }
 
     public bool IsPuzzleCompleted => puzzleCompleted;
+
+    public bool IsCompletionAudioPlaying()
+    {
+        return audioSource != null && audioSource.isPlaying && audioSource.clip == completionAudioClip;
+    }
+
 }

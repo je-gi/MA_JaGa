@@ -101,5 +101,11 @@ public class P2Manager : MonoBehaviour
         }
     }
 
+    public bool IsCompletionAudioPlaying()
+    {
+        return audioSource != null && audioSource.isPlaying && audioSource.clip == completionAudioClip;
+    }
+
+
     public bool IsPuzzleCompleted => puzzleCompleted;
 }
