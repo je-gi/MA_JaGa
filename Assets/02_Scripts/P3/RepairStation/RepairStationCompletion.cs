@@ -8,6 +8,8 @@ public class RepairStationCompletion : MonoBehaviour
     public PanelStateController panelStateController;
     public GameObject canvasToHide;
     public GameObject bootsObject;
+    public GameObject objectToShow;
+    public GameObject objectToHide;
     public AudioSource snailAudio;
 
     private bool completionTriggered = false;
@@ -34,20 +36,23 @@ public class RepairStationCompletion : MonoBehaviour
     {
         completionTriggered = true;
 
-        // Canvas ausblenden
         if (canvasToHide != null)
             canvasToHide.SetActive(false);
 
-        // Schnecken-Audio abspielen
         if (snailAudio != null)
         {
             snailAudio.Play();
             yield return new WaitForSeconds(snailAudio.clip.length);
         }
 
-        // Boots-Objekt einblenden
         if (bootsObject != null)
             bootsObject.SetActive(true);
+
+        if (objectToShow != null)
+            objectToShow.SetActive(true);
+
+        if (objectToHide != null)
+            objectToHide.SetActive(false);
 
         Debug.Log("Workbench abgeschlossen!");
     }

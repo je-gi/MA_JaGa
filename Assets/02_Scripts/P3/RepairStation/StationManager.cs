@@ -11,11 +11,17 @@ public class StationManager : MonoBehaviour
     [Header("Sounds")]
     public AudioClip[] miniGameStartSounds;
     public AudioSource audioSource;
+    public AudioClip errorAudioClip;
+    public AudioClip successAudioClip;
 
     [Header("Zusätzliche Objekte pro Minispiel")]
     public GameObject[] miniGame1AdditionalObjects;
-    public GameObject[] miniGame2AdditionalObjects; 
-    public GameObject[] miniGame3AdditionalObjects; 
+    public GameObject[] miniGame2AdditionalObjects;
+    public GameObject[] miniGame3AdditionalObjects;
+    public GameObject[] miniGame4AdditionalObjects;
+
+    [Header("Socket Checker")]
+    public MiniGameSocketChecker[] socketCheckers;
 
     private int activeMiniGameIndex = -1;
 
@@ -28,8 +34,7 @@ public class StationManager : MonoBehaviour
     {
         if (levelButtons[index].interactable)
         {
-            PlayMiniGameSound(index); 
-
+            PlayMiniGameSound(index);
             HideStationPanels();
             ShowMiniGame(index);
         }
@@ -62,28 +67,33 @@ public class StationManager : MonoBehaviour
         {
             miniGames[index].SetActive(true);
             activeMiniGameIndex = index;
+
+            switch (index)
+            {
+                case 0:
+                    ShowAdditionalObjects(miniGame1AdditionalObjects);
+                    break;
+                case 1:
+                    ShowAdditionalObjects(miniGame2AdditionalObjects);
+                    break;
+                case 2:
+                    ShowAdditionalObjects(miniGame3AdditionalObjects);
+                    break;
+                case 3:
+                    ShowAdditionalObjects(miniGame4AdditionalObjects);
+                    break;
+            }
         }
     }
 
-    public void OnMiniGameCompleted()
+    private void ShowAdditionalObjects(GameObject[] additionalObjects)
     {
-        if (activeMiniGameIndex != -1)
+        if (additionalObjects != null)
         {
-            PanelStateController.instance.OnLevelCompleted(activeMiniGameIndex);
-            miniGames[activeMiniGameIndex].SetActive(false);
-            ShowStationPanels();
-
-            switch (activeMiniGameIndex)
+            foreach (GameObject obj in additionalObjects)
             {
-                case 0:
-                    HideAdditionalObjects(miniGame1AdditionalObjects);
-                    break;
-                case 1:
-                    HideAdditionalObjects(miniGame2AdditionalObjects);
-                    break;
-                case 2:
-                    HideAdditionalObjects(miniGame3AdditionalObjects);
-                    break;
+                if (obj != null)
+                    obj.SetActive(true);
             }
         }
     }
@@ -96,6 +106,42 @@ public class StationManager : MonoBehaviour
             {
                 if (obj != null)
                     obj.SetActive(false);
+            }
+        }
+    }
+
+    public void OnMiniGameCompleted()
+    {
+        if (activeMiniGameIndex != -1)
+        {
+            var checker = socketCheckers[activeMiniGameIndex];
+            if (checker != null && !checker.AreAllSocketsCorrect())
+            {
+                Debug.LogWarning("Nicht alle Sockets korrekt befüllt!");
+                PlayErrorSound();
+                return;
+            }
+
+            PanelStateController.instance.OnLevelCompleted(activeMiniGameIndex);
+            miniGames[activeMiniGameIndex].SetActive(false);
+            ShowStationPanels();
+
+            PlaySuccessSound();
+
+            switch (activeMiniGameIndex)
+            {
+                case 0:
+                    HideAdditionalObjects(miniGame1AdditionalObjects);
+                    break;
+                case 1:
+                    HideAdditionalObjects(miniGame2AdditionalObjects);
+                    break;
+                case 2:
+                    HideAdditionalObjects(miniGame3AdditionalObjects);
+                    break;
+                case 3:
+                    HideAdditionalObjects(miniGame4AdditionalObjects); 
+                    break;
             }
         }
     }
@@ -113,6 +159,30 @@ public class StationManager : MonoBehaviour
                 audioSource.clip = clip;
                 audioSource.Play();
             }
+        }
+    }
+
+    private void PlayErrorSound()
+    {
+        if (audioSource != null && errorAudioClip != null)
+        {
+            if (audioSource.isPlaying)
+                audioSource.Stop();
+
+            audioSource.clip = errorAudioClip;
+            audioSource.Play();
+        }
+    }
+
+    private void PlaySuccessSound()
+    {
+        if (audioSource != null && successAudioClip != null)
+        {
+            if (audioSource.isPlaying)
+                audioSource.Stop();
+
+            audioSource.clip = successAudioClip;
+            audioSource.Play();
         }
     }
 }
