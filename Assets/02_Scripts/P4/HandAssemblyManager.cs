@@ -25,7 +25,11 @@ public class HandAssemblyManager : MonoBehaviour
 
     [Header("UI Text Management")]
     public TextMeshProUGUI uiText;
-    private Dictionary<string, string> objectTextDict = new Dictionary<string, string>(); 
+    private Dictionary<string, string> objectTextDict = new Dictionary<string, string>();
+
+    [Header("Audio Management")]
+    public AudioClip hand2StartAudio; 
+    public AudioSource audioSource;   
 
     private int hand1Step = 0;
     private int hand2Step = 0;
@@ -141,7 +145,6 @@ public class HandAssemblyManager : MonoBehaviour
         }
     }
 
-
     private bool IsAnySocketOccupied()
     {
         return socketCheckerScript != null &&
@@ -157,6 +160,8 @@ public class HandAssemblyManager : MonoBehaviour
         SetActiveList(hand2Parts, true);
         if (hand2Sockets.Count > 0)
             hand2Sockets[0].socketActive = true;
+
+        PlayAudio(hand2StartAudio);
     }
 
     public void AddTextForObject(GameObject obj, string text)
@@ -177,6 +182,19 @@ public class HandAssemblyManager : MonoBehaviour
             {
                 uiText.text += item.Value + "\n";
             }
+        }
+    }
+
+    private void PlayAudio(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+
+            audioSource.PlayOneShot(clip);
         }
     }
 }
