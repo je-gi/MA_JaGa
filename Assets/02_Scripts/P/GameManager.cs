@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
@@ -195,7 +196,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(fadeScreen.fadeOutDuration);
         }
 
-        Debug.Log("Alle Puzzles abgeschlossen.");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     private IEnumerator WaitForPuzzleCompletion(MonoBehaviour puzzleManager)
