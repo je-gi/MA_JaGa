@@ -48,23 +48,30 @@ public class PanelStateController : MonoBehaviour
             Button button = levelButtons[i];
             TextMeshProUGUI customText = buttonTexts[i];
             Image customIcon = buttonIcons[i];
+            Image buttonImage = button.GetComponent<Image>();
 
             switch (panelStates[i])
             {
                 case PanelState.Locked:
                     customIcon.sprite = lockedIcon;
-                    customText.text = "Gesperrt";
+                    customText.text = "locked";
                     button.interactable = false;
+                    if (buttonImage != null)
+                        buttonImage.raycastTarget = false;
                     break;
                 case PanelState.Unlocked:
                     customIcon.sprite = unlockedIcon;
-                    customText.text = "Offen";
+                    customText.text = "unlocked";
                     button.interactable = true;
+                    if (buttonImage != null)
+                        buttonImage.raycastTarget = true;
                     break;
                 case PanelState.Completed:
                     customIcon.sprite = completedIcon;
-                    customText.text = "Abgeschlossen";
+                    customText.text = "completed";
                     button.interactable = false;
+                    if (buttonImage != null)
+                        buttonImage.raycastTarget = false;
                     break;
             }
         }
