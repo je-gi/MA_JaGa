@@ -199,13 +199,13 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {r: 0.37330395, g: 0.5424339, b: 0.78616345, a: 1}
+    m_Value: {r: 0.31216627, g: 0.42112023, b: 0.5754717, a: 1}
   highlights:
     m_OverrideState: 1
-    m_Value: {r: 0.8930817, g: 0.6742109, b: 0.3173529, a: 1}
+    m_Value: {r: 0.8301887, g: 0.6802539, b: 0.30936277, a: 1}
   balance:
     m_OverrideState: 1
-    m_Value: -7.4
+    m_Value: -45.5
 --- !u!114 &2148481179225867373
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -368,7 +368,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
   green:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       <length>k__BackingField: 2
       m_Loop: 0
@@ -380,7 +380,7 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 1
+          inSlope: 0
           outSlope: 1
           tangentMode: 0
           weightedMode: 0
@@ -390,7 +390,7 @@ MonoBehaviour:
           time: 1
           value: 1
           inSlope: 1
-          outSlope: 1
+          outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
