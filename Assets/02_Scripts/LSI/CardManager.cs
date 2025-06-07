@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using TMPro;
 
 public class CardManager : MonoBehaviour
 {
     public XRSocketInteractor[] sockets;
     public GameObject[] setObjects;
     public GameObject nextButton;
+
+    public TMP_Text infoText; 
+    public string[] setDescriptions;
 
     public event System.Action<string> OnLSICompleted;
 
@@ -31,6 +35,15 @@ public class CardManager : MonoBehaviour
         if (setIndex < setObjects.Length)
         {
             setObjects[setIndex].SetActive(true);
+
+            if (setIndex < setDescriptions.Length)
+            {
+                infoText.text = setDescriptions[setIndex];
+            }
+            else
+            {
+                infoText.text = "";
+            }
         }
     }
 
