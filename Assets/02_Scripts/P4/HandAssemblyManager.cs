@@ -11,14 +11,13 @@ public class HandAssemblyManager : MonoBehaviour
     public List<GameObject> hand1Parts;
     public GameObject hand1Model;
     public Spraycan spray1;
-    public Shrinkgun shrink1;
+    public Expandgun expand1;
 
     [Header("Hand 2")]
     public List<XRSocketInteractor> hand2Sockets;
     public List<GameObject> hand2Parts;
     public GameObject hand2Model;
     public Spraycan spray2;
-    public Shrinkgun shrink2;
 
     [Header("SocketChecker")]
     public DisableGrabAndMakeKinematicOnSocket socketCheckerScript;
@@ -28,8 +27,8 @@ public class HandAssemblyManager : MonoBehaviour
     private Dictionary<string, string> objectTextDict = new Dictionary<string, string>();
 
     [Header("Audio Management")]
-    public AudioClip hand2StartAudio; 
-    public AudioSource audioSource;   
+    public AudioClip hand2StartAudio;
+    public AudioSource audioSource;
 
     private int hand1Step = 0;
     private int hand2Step = 0;
@@ -79,7 +78,7 @@ public class HandAssemblyManager : MonoBehaviour
             hand1Step++;
             ActivateSocketAndPart(hand1Sockets, hand1Parts, hand1Step);
         }
-        else if (hand1Step == 2 && hand1Sockets[2].hasSelection && shrink1.IsShrinkSuccessful())
+        else if (hand1Step == 2 && hand1Sockets[2].hasSelection && expand1.IsShrinkSuccessful())
         {
             hand1Step++;
             ActivateSocketAndPart(hand1Sockets, hand1Parts, hand1Step);
@@ -89,7 +88,7 @@ public class HandAssemblyManager : MonoBehaviour
             FinalizeHand(hand1Sockets, hand1Parts, hand1Model);
             hand1Done = true;
             spray1.ResetSpray();
-            shrink1.ResetShrink();
+            expand1.ResetShrink();
         }
     }
 
@@ -107,7 +106,7 @@ public class HandAssemblyManager : MonoBehaviour
             hand2Step++;
             ActivateSocketAndPart(hand2Sockets, hand2Parts, hand2Step);
         }
-        else if (hand2Step == 2 && hand2Sockets[2].hasSelection && shrink2.IsShrinkSuccessful())
+        else if (hand2Step == 2 && hand2Sockets[2].hasSelection)
         {
             hand2Step++;
             ActivateSocketAndPart(hand2Sockets, hand2Parts, hand2Step);

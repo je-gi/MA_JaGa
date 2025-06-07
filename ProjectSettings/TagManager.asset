@@ -12,7 +12,6 @@ TagManager:
   - Blue_Cube
   - Red_Cube
   - Sprayable
-  - Shrinkable
   - EyeYellowSmall
   - EyeRedLarge
   - EyeBlueLarge
@@ -35,6 +34,7 @@ TagManager:
   - Variant02
   - Variant03
   - Variant04
+  - Expandable
   layers:
   - Default
   - TransparentFX
