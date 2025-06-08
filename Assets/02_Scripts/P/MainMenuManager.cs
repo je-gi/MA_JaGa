@@ -24,7 +24,7 @@ public class MainMenuManager : MonoBehaviour
         if (!leftHand.isValid)
         {
             leftHand = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
-            Debug.Log("Reacquired left hand device");
+            
         }
 
         bool menuButtonPressed = false;

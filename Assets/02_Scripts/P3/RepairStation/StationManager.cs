@@ -3,25 +3,23 @@ using UnityEngine.UI;
 
 public class StationManager : MonoBehaviour
 {
-    [Header("Panels & Minispiele")]
     public GameObject[] stationPanels;
     public GameObject[] miniGames;
     public Button[] levelButtons;
 
-    [Header("Sounds")]
     public AudioClip[] miniGameStartSounds;
     public AudioSource audioSource;
     public AudioClip errorAudioClip;
     public AudioClip successAudioClip;
 
-    [Header("Zusätzliche Objekte pro Minispiel")]
     public GameObject[] miniGame1AdditionalObjects;
     public GameObject[] miniGame2AdditionalObjects;
     public GameObject[] miniGame3AdditionalObjects;
     public GameObject[] miniGame4AdditionalObjects;
 
-    [Header("Socket Checker")]
     public MiniGameSocketChecker[] socketCheckers;
+
+    public RepairStationCompletion repairStationCompletion;
 
     private int activeMiniGameIndex = -1;
 
@@ -42,23 +40,17 @@ public class StationManager : MonoBehaviour
 
     private void ShowStationPanels()
     {
-        foreach (GameObject panel in stationPanels)
-        {
+        foreach (var panel in stationPanels)
             panel.SetActive(true);
-        }
 
-        foreach (GameObject miniGame in miniGames)
-        {
+        foreach (var miniGame in miniGames)
             miniGame.SetActive(false);
-        }
     }
 
     private void HideStationPanels()
     {
-        foreach (GameObject panel in stationPanels)
-        {
+        foreach (var panel in stationPanels)
             panel.SetActive(false);
-        }
     }
 
     private void ShowMiniGame(int index)
@@ -90,7 +82,7 @@ public class StationManager : MonoBehaviour
     {
         if (additionalObjects != null)
         {
-            foreach (GameObject obj in additionalObjects)
+            foreach (var obj in additionalObjects)
             {
                 if (obj != null)
                     obj.SetActive(true);
@@ -102,7 +94,7 @@ public class StationManager : MonoBehaviour
     {
         if (additionalObjects != null)
         {
-            foreach (GameObject obj in additionalObjects)
+            foreach (var obj in additionalObjects)
             {
                 if (obj != null)
                     obj.SetActive(false);
@@ -117,7 +109,6 @@ public class StationManager : MonoBehaviour
             var checker = socketCheckers[activeMiniGameIndex];
             if (checker != null && !checker.AreAllSocketsCorrect())
             {
-                Debug.LogWarning("Nicht alle Sockets korrekt befüllt!");
                 PlayErrorSound();
                 return;
             }
@@ -125,7 +116,6 @@ public class StationManager : MonoBehaviour
             PanelStateController.instance.OnLevelCompleted(activeMiniGameIndex);
             miniGames[activeMiniGameIndex].SetActive(false);
             ShowStationPanels();
-
             PlaySuccessSound();
 
             switch (activeMiniGameIndex)
@@ -140,8 +130,23 @@ public class StationManager : MonoBehaviour
                     HideAdditionalObjects(miniGame3AdditionalObjects);
                     break;
                 case 3:
-                    HideAdditionalObjects(miniGame4AdditionalObjects); 
+                    HideAdditionalObjects(miniGame4AdditionalObjects);
                     break;
+            }
+
+            bool allLevelsDone = true;
+            foreach (var btn in levelButtons)
+            {
+                if (btn.interactable)
+                {
+                    allLevelsDone = false;
+                    break;
+                }
+            }
+
+            if (allLevelsDone && repairStationCompletion != null)
+            {
+                repairStationCompletion.TriggerCompletionManually();
             }
         }
     }

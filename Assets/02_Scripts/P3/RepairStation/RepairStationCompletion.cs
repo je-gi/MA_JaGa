@@ -1,7 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
 
 public class RepairStationCompletion : MonoBehaviour
 {
@@ -24,7 +22,7 @@ public class RepairStationCompletion : MonoBehaviour
 
     private bool AllPanelsCompleted()
     {
-        foreach (Button button in panelStateController.levelButtons)
+        foreach (var button in panelStateController.levelButtons)
         {
             if (button.interactable)
                 return false;
@@ -53,7 +51,11 @@ public class RepairStationCompletion : MonoBehaviour
 
         if (objectToHide != null)
             objectToHide.SetActive(false);
+    }
 
-        Debug.Log("Workbench abgeschlossen!");
+    public void TriggerCompletionManually()
+    {
+        if (!completionTriggered)
+            StartCoroutine(HandleCompletion());
     }
 }
