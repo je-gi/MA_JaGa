@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class ShowObjectsWhenSocketsFilled : MonoBehaviour
 {
-    public XRSocketInteractor socket1;
-    public XRSocketInteractor socket2;
+    public XRSocketInteractor triggerSocket;
 
     public GameObject objectToShow1;
     public GameObject objectToShow2;
@@ -14,16 +13,18 @@ public class ShowObjectsWhenSocketsFilled : MonoBehaviour
 
     void Update()
     {
-        if (!alreadyShown && BothSocketsFilled())
+        if (!alreadyShown && triggerSocket.GetOldestInteractableSelected() != null)
         {
-            objectToShow1.SetActive(true);
-            objectToShow2.SetActive(true);
-            alreadyShown = true;
+            ShowObjects();
         }
     }
 
-    bool BothSocketsFilled()
+    public void ShowObjects()
     {
-        return socket1.GetOldestInteractableSelected() != null && socket2.GetOldestInteractableSelected() != null;
+        if (alreadyShown) return;
+
+        objectToShow1.SetActive(true);
+        objectToShow2.SetActive(true);
+        alreadyShown = true;
     }
 }

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 public class P1Manager : MonoBehaviour
 {
-    [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip clipIntro;
     public AudioClip clipOnTriggerEntered;
@@ -16,18 +15,12 @@ public class P1Manager : MonoBehaviour
     public AudioClip clipOnObjectGrabbed;
     public AudioClip clipOnRevealObjects;
 
-    [Header("Trigger Zone")]
     public Collider triggerZone;
-
-    [Header("Camera (VR)")]
     public Transform vrCameraTransform;
 
-    [Header("Socket Checker")]
     public SocketChecking socketChecker;
-
-    [Header("Objects To Track")]
     public GameObject objectToTrack1;
-    public GameObject objectToTrack2;
+    public XRSocketInteractor socketToEnableAfterSuccess;
 
     [System.Serializable]
     public class SocketAudioPair
@@ -37,16 +30,10 @@ public class P1Manager : MonoBehaviour
         public bool hasPlayed = false;
     }
 
-    [Header("Socket Audio Mapping")]
     public List<SocketAudioPair> socketAudioPairs;
-
-    [Header("External Script")]
     public ShowObjectsWhenSocketsFilled showObjectsScript;
-
-    [Header("DisableGrabAndMakeKinematic Script")]
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
-    [Header("Debug")]
     public bool activateManually = false;
 
     private bool hasStarted = false;
@@ -67,10 +54,9 @@ public class P1Manager : MonoBehaviour
             if (grab1 != null) grab1.selectEntered.AddListener(OnObjectGrabbed);
         }
 
-        if (objectToTrack2 != null)
+        if (socketToEnableAfterSuccess != null)
         {
-            XRGrabInteractable grab2 = objectToTrack2.GetComponent<XRGrabInteractable>();
-            if (grab2 != null) grab2.selectEntered.AddListener(OnObjectGrabbed);
+            socketToEnableAfterSuccess.gameObject.SetActive(false);
         }
 
         socketChecker.OnPuzzleStatusChanged += OnPuzzleStatusChanged;
@@ -94,17 +80,14 @@ public class P1Manager : MonoBehaviour
         CheckRevealObjectsFromExternalScript();
     }
 
-    private void StartPuzzle()
+    void StartPuzzle()
     {
         if (hasStarted) return;
-
         hasStarted = true;
-
-        if (clipIntro != null)
-            PlayClip(clipIntro);
+        if (clipIntro != null) PlayClip(clipIntro);
     }
 
-    private void CheckPuzzleCompletion()
+    void CheckPuzzleCompletion()
     {
         if (disableGrabAndMakeKinematicOnSocket != null && disableGrabAndMakeKinematicOnSocket.IsPuzzleCompleted() && !puzzleCompleted)
         {
@@ -113,7 +96,7 @@ public class P1Manager : MonoBehaviour
         }
     }
 
-    private bool IsCameraInTrigger()
+    bool IsCameraInTrigger()
     {
         if (vrCameraTransform != null && triggerZone != null)
         {
@@ -122,7 +105,7 @@ public class P1Manager : MonoBehaviour
         return false;
     }
 
-    private void PlayClip(AudioClip clip)
+    void PlayClip(AudioClip clip)
     {
         if (clip != null && audioSource != null)
         {
@@ -132,24 +115,40 @@ public class P1Manager : MonoBehaviour
         }
     }
 
-    private void OnPuzzleStatusChanged(bool isCompleted)
+    void OnPuzzleStatusChanged(bool isCompleted)
     {
         if (isCompleted)
+        {
             PlayClip(clipOnSuccess);
+            if (objectToTrack1 != null) objectToTrack1.SetActive(true);
+            if (socketToEnableAfterSuccess != null) socketToEnableAfterSuccess.gameObject.SetActive(true);
+        }
         else
+        {
             PlayClip(clipOnFailure);
+        }
     }
 
-    private void OnSocketFilled(SocketAudioPair pair)
+    void OnSocketFilled(SocketAudioPair pair)
     {
         if (!pair.hasPlayed && pair.audioClip != null)
         {
             PlayClip(pair.audioClip);
             pair.hasPlayed = true;
         }
+
+        if (objectToTrack1 != null &&
+            pair.socket.firstInteractableSelected != null &&
+            pair.socket.firstInteractableSelected.transform == objectToTrack1.transform)
+        {
+            if (showObjectsScript != null && !showObjectsScript.AlreadyShown)
+            {
+                showObjectsScript.ShowObjects();
+            }
+        }
     }
 
-    private void OnObjectGrabbed(SelectEnterEventArgs args)
+    void OnObjectGrabbed(SelectEnterEventArgs args)
     {
         if (!hasTriggeredAudioPlayed && clipOnObjectGrabbed != null)
         {
@@ -158,7 +157,7 @@ public class P1Manager : MonoBehaviour
         }
     }
 
-    private void CheckRevealObjectsFromExternalScript()
+    void CheckRevealObjectsFromExternalScript()
     {
         if (showObjectsScript != null && showObjectsScript.AlreadyShown && !revealAudioPlayed)
         {
@@ -167,10 +166,7 @@ public class P1Manager : MonoBehaviour
         }
     }
 
-    public bool IsPuzzleCompleted
-    {
-        get { return puzzleCompleted; }
-    }
+    public bool IsPuzzleCompleted => puzzleCompleted;
 
     public void StartPuzzleExternally()
     {
