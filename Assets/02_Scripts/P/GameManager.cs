@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
     [Header("Objekte, die nach LSI ausgeblendet werden sollen")]
     public GameObject[] objectsToHideOnFirstPuzzleStart;
 
+    [Header("Objekte, die nach dem Intro aktiviert werden")]
+    public GameObject[] objectsToActivateAfterIntro;
+
     [Header("LSI-Komponenten")]
     public LearningTypeCalculator learningTypeCalculator;
     public CardManager cardManager;
@@ -46,7 +49,14 @@ public class GameManager : MonoBehaviour
         {
             obj.SetActive(false);
         }
+
         cardManagerObject.SetActive(false);
+
+        foreach (var obj in objectsToActivateAfterIntro)
+        {
+            if (obj != null)
+                obj.SetActive(false);
+        }
 
         if (fadeScreen != null)
         {
@@ -66,9 +76,16 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(introAudioClip.length);
 
         cardManagerObject.SetActive(true);
+
         foreach (var obj in lsiObjects)
         {
             obj.SetActive(true);
+        }
+
+        foreach (var obj in objectsToActivateAfterIntro)
+        {
+            if (obj != null)
+                obj.SetActive(true);
         }
     }
 
