@@ -11,8 +11,13 @@ public class CardManager : MonoBehaviour
     public GameObject[] setObjects;
     public GameObject nextButton;
 
-    public TMP_Text infoText; 
+    public TMP_Text infoText;
     public string[] setDescriptions;
+
+    public AudioClip successClip;
+    public AudioClip failClip;
+
+    public AudioSource audioSource;
 
     public event System.Action<string> OnLSICompleted;
 
@@ -51,6 +56,9 @@ public class CardManager : MonoBehaviour
     {
         if (AreAllSocketsFilled())
         {
+            if (audioSource != null && successClip != null)
+                audioSource.PlayOneShot(successClip);
+
             learningTypeCalculator.AddScores(sockets);
             RemoveCardsFromSockets();
             currentSetIndex++;
@@ -64,6 +72,11 @@ public class CardManager : MonoBehaviour
                 string finalLearningType = learningTypeCalculator.CalculateFinalLearningType();
                 OnLSICompleted?.Invoke(finalLearningType);
             }
+        }
+        else
+        {
+            if (audioSource != null && failClip != null)
+                audioSource.PlayOneShot(failClip);
         }
     }
 

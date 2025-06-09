@@ -22,7 +22,7 @@ public class IntroManager : MonoBehaviour
 
         if (fadeScreen != null)
         {
-            fadeScreen.FadeIn();
+            fadeScreen.FadeIn(true);
             yield return new WaitForSeconds(fadeScreen.fadeInDuration);
         }
 

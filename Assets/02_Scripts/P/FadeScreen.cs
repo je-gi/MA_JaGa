@@ -21,25 +21,25 @@ public class FadeScreen : MonoBehaviour
         rend.material.SetColor("_Color", c);
 
         if (fadeOnStart)
-            FadeIn();
+            FadeIn(true); 
     }
 
-    public void FadeIn()
+    public void FadeIn(bool disableAfter = false)
     {
-        Fade(1f, 0f, fadeInDuration);
+        Fade(1f, 0f, fadeInDuration, disableAfter);
     }
 
     public void FadeOut()
     {
-        Fade(0f, 1f, fadeOutDuration);
+        Fade(0f, 1f, fadeOutDuration, false);
     }
 
-    public void Fade(float alphaIn, float alphaOut, float duration)
+    public void Fade(float alphaIn, float alphaOut, float duration, bool disableAfter = false)
     {
-        StartCoroutine(FadeRoutine(alphaIn, alphaOut, duration));
+        StartCoroutine(FadeRoutine(alphaIn, alphaOut, duration, disableAfter));
     }
 
-    private IEnumerator FadeRoutine(float alphaIn, float alphaOut, float duration)
+    private IEnumerator FadeRoutine(float alphaIn, float alphaOut, float duration, bool disableAfter)
     {
         float timer = 0f;
 
@@ -47,7 +47,6 @@ public class FadeScreen : MonoBehaviour
         {
             Color newColor = fadeColor;
             newColor.a = Mathf.Lerp(alphaIn, alphaOut, timer / duration);
-
             rend.material.SetColor("_Color", newColor);
 
             timer += Time.deltaTime;
@@ -57,5 +56,8 @@ public class FadeScreen : MonoBehaviour
         Color finalColor = fadeColor;
         finalColor.a = alphaOut;
         rend.material.SetColor("_Color", finalColor);
+
+        if (disableAfter)
+            gameObject.SetActive(false);
     }
 }

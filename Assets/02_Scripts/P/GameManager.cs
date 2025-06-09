@@ -36,6 +36,10 @@ public class GameManager : MonoBehaviour
     [Header("XR Interaktionen")]
     public XRSocketInteractor socketInteractor;
 
+    [Header("Callout Sichtbarkeit")]
+    public VisibilityCallout visibilityCallout;
+    public string lsiCalloutKey = "LSICallout";
+
     private bool firstPuzzleStarted = false;
     private Queue<MonoBehaviour> puzzleQueue = new Queue<MonoBehaviour>();
 
@@ -44,7 +48,8 @@ public class GameManager : MonoBehaviour
         if (introManager != null)
             introManager.OnIntroCompleted += HandleIntroCompleted;
 
-        cardManager.OnLSICompleted += OnLSIComplete;
+        if (cardManager != null)
+            cardManager.OnLSICompleted += OnLSIComplete;
     }
 
     private void OnDisable()
@@ -52,7 +57,8 @@ public class GameManager : MonoBehaviour
         if (introManager != null)
             introManager.OnIntroCompleted -= HandleIntroCompleted;
 
-        cardManager.OnLSICompleted -= OnLSIComplete;
+        if (cardManager != null)
+            cardManager.OnLSICompleted -= OnLSIComplete;
     }
 
     private void Start()
@@ -60,23 +66,41 @@ public class GameManager : MonoBehaviour
         foreach (var obj in lsiObjects)
             obj.SetActive(false);
 
-        cardManagerObject.SetActive(false);
+        if (cardManagerObject != null)
+            cardManagerObject.SetActive(false);
     }
 
     private void HandleIntroCompleted()
     {
-        cardManagerObject.SetActive(true);
+        if (cardManagerObject != null)
+            cardManagerObject.SetActive(true);
 
         foreach (var obj in lsiObjects)
-            obj.SetActive(true);
+            if (obj != null)
+                obj.SetActive(true);
+
+        if (visibilityCallout != null)
+            visibilityCallout.SetCalloutVisibility(lsiCalloutKey, true);
     }
 
     private void OnLSIComplete(string learningType)
     {
-        audioSource.clip = lsiAudioClip;
-        audioSource.Play();
+        foreach (var obj in lsiObjects)
+            if (obj != null)
+                obj.SetActive(false);
 
-        learningTypeCalculator.ShowLearningTypeObject(learningType);
+        if (visibilityCallout != null)
+            visibilityCallout.SetCalloutVisibility(lsiCalloutKey, false);
+
+        if (learningTypeCalculator != null)
+            learningTypeCalculator.ShowLearningTypeObject(learningType);
+
+        if (audioSource != null && lsiAudioClip != null)
+        {
+            audioSource.clip = lsiAudioClip;
+            audioSource.Play();
+        }
+
         SetPuzzleOrder(learningType);
 
         if (!firstPuzzleStarted)
@@ -90,10 +114,12 @@ public class GameManager : MonoBehaviour
         while (!socketInteractor.hasSelection)
             yield return null;
 
-        audioSource.clip = postSocketAudioClip;
-        audioSource.Play();
-
-        yield return new WaitWhile(() => audioSource.isPlaying);
+        if (audioSource != null && postSocketAudioClip != null)
+        {
+            audioSource.clip = postSocketAudioClip;
+            audioSource.Play();
+            yield return new WaitWhile(() => audioSource.isPlaying);
+        }
 
         HideInitialObjects();
 
@@ -106,10 +132,8 @@ public class GameManager : MonoBehaviour
         if (objectsToHideOnFirstPuzzleStart != null)
         {
             foreach (var obj in objectsToHideOnFirstPuzzleStart)
-            {
                 if (obj != null)
                     obj.SetActive(false);
-            }
         }
     }
 
