@@ -7,12 +7,11 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Transition")]
-    public FadeScreen fadeScreen;
+    [Header("Intro")]
+    public IntroManager introManager;
 
     [Header("Audio")]
     public AudioSource audioSource;
-    public AudioClip introAudioClip;
     public AudioClip lsiAudioClip;
     public AudioClip postSocketAudioClip;
     public AudioClip finalPuzzleCompletedAudioClip;
@@ -23,9 +22,6 @@ public class GameManager : MonoBehaviour
 
     [Header("Objekte, die nach LSI ausgeblendet werden sollen")]
     public GameObject[] objectsToHideOnFirstPuzzleStart;
-
-    [Header("Objekte, die nach dem Intro aktiviert werden")]
-    public GameObject[] objectsToActivateAfterIntro;
 
     [Header("LSI-Komponenten")]
     public LearningTypeCalculator learningTypeCalculator;
@@ -43,50 +39,36 @@ public class GameManager : MonoBehaviour
     private bool firstPuzzleStarted = false;
     private Queue<MonoBehaviour> puzzleQueue = new Queue<MonoBehaviour>();
 
-    private IEnumerator Start()
+    private void OnEnable()
     {
-        foreach (var obj in lsiObjects)
-        {
-            obj.SetActive(false);
-        }
-
-        cardManagerObject.SetActive(false);
-
-        foreach (var obj in objectsToActivateAfterIntro)
-        {
-            if (obj != null)
-                obj.SetActive(false);
-        }
-
-        if (fadeScreen != null)
-        {
-            fadeScreen.FadeIn();
-            yield return new WaitForSeconds(fadeScreen.fadeInDuration);
-        }
-
-        StartCoroutine(StartIntroSequence());
+        if (introManager != null)
+            introManager.OnIntroCompleted += HandleIntroCompleted;
 
         cardManager.OnLSICompleted += OnLSIComplete;
     }
 
-    private IEnumerator StartIntroSequence()
+    private void OnDisable()
     {
-        audioSource.clip = introAudioClip;
-        audioSource.Play();
-        yield return new WaitForSeconds(introAudioClip.length);
+        if (introManager != null)
+            introManager.OnIntroCompleted -= HandleIntroCompleted;
 
+        cardManager.OnLSICompleted -= OnLSIComplete;
+    }
+
+    private void Start()
+    {
+        foreach (var obj in lsiObjects)
+            obj.SetActive(false);
+
+        cardManagerObject.SetActive(false);
+    }
+
+    private void HandleIntroCompleted()
+    {
         cardManagerObject.SetActive(true);
 
         foreach (var obj in lsiObjects)
-        {
             obj.SetActive(true);
-        }
-
-        foreach (var obj in objectsToActivateAfterIntro)
-        {
-            if (obj != null)
-                obj.SetActive(true);
-        }
     }
 
     private void OnLSIComplete(string learningType)
@@ -106,9 +88,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator WaitForObjectInSocketAndStartPuzzle()
     {
         while (!socketInteractor.hasSelection)
-        {
             yield return null;
-        }
 
         audioSource.clip = postSocketAudioClip;
         audioSource.Play();
@@ -135,6 +115,8 @@ public class GameManager : MonoBehaviour
 
     private void SetPuzzleOrder(string learningType)
     {
+        puzzleQueue.Clear();
+
         if (learningType == "Diverging")
         {
             puzzleQueue.Enqueue(p1);
@@ -207,10 +189,10 @@ public class GameManager : MonoBehaviour
             yield return new WaitWhile(() => audioSource.isPlaying);
         }
 
-        if (fadeScreen != null)
+        if (introManager != null && introManager.fadeScreen != null)
         {
-            fadeScreen.FadeOut();
-            yield return new WaitForSeconds(fadeScreen.fadeOutDuration);
+            introManager.fadeScreen.FadeOut();
+            yield return new WaitForSeconds(introManager.fadeScreen.fadeOutDuration);
         }
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
