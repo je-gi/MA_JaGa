@@ -109,10 +109,17 @@ public class P1Manager : MonoBehaviour
 
     void CheckPuzzleCompletion()
     {
-        if (disableGrabAndMakeKinematicOnSocket != null && disableGrabAndMakeKinematicOnSocket.IsPuzzleCompleted() && !puzzleCompleted)
+        if (disableGrabAndMakeKinematicOnSocket != null &&
+            disableGrabAndMakeKinematicOnSocket.IsPuzzleCompleted() &&
+            !puzzleCompleted)
         {
             PlayClip(clipOnPuzzleCompleted);
             puzzleCompleted = true;
+
+            if (showObjectsScript != null)
+            {
+                showObjectsScript.StopAnimation();
+            }
         }
     }
 
@@ -163,7 +170,7 @@ public class P1Manager : MonoBehaviour
         {
             if (showObjectsScript != null && !showObjectsScript.AlreadyShown)
             {
-                showObjectsScript.ShowObjects();
+                showObjectsScript.ShowAndAnimate();
             }
         }
     }
