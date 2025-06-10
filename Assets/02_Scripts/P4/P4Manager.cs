@@ -1,8 +1,6 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Interactors;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using System.Collections.Generic;
 
 public class P4Manager : MonoBehaviour
 {
@@ -24,16 +22,21 @@ public class P4Manager : MonoBehaviour
     [Header("Debug")]
     public bool activateManually = false;
 
+    [Header("Start Sound Delay")]
+    [Tooltip("Seconds to wait before playing the start sound")]
+    public float startDelay = 2f;
+
     private bool puzzleCompleted = false;
     private bool hasStarted = false;
     private bool hasTriggeredAudioPlayed = false;
+    private bool startAudioFinished = false;
 
     void Update()
     {
         if (activateManually && !hasStarted)
         {
-            StartPuzzle();
             activateManually = false;
+            StartCoroutine(StartPuzzleWithDelay());
         }
 
         if (hasStarted && disableGrabAndMakeKinematicOnSocket != null && disableGrabAndMakeKinematicOnSocket.IsPuzzleCompleted() && !puzzleCompleted)
@@ -42,15 +45,22 @@ public class P4Manager : MonoBehaviour
             puzzleCompleted = true;
         }
 
-        if (!hasTriggeredAudioPlayed && triggerZone != null && IsCameraInTrigger())
+        if (!hasTriggeredAudioPlayed && hasStarted && startAudioFinished && triggerZone != null && IsCameraInTrigger())
         {
             PlayTriggerAreaAudio();
-            hasTriggeredAudioPlayed = true; 
+            hasTriggeredAudioPlayed = true;
         }
     }
 
     public void StartPuzzleExternally()
     {
+        if (!hasStarted)
+            StartCoroutine(StartPuzzleWithDelay());
+    }
+
+    private IEnumerator StartPuzzleWithDelay()
+    {
+        yield return new WaitForSeconds(startDelay);
         StartPuzzle();
     }
 
@@ -69,7 +79,19 @@ public class P4Manager : MonoBehaviour
             audioSource.Stop();
             audioSource.clip = startAudioClip;
             audioSource.Play();
+            startAudioFinished = false;
+            StartCoroutine(WaitForAudioEnd(startAudioClip.length));
         }
+        else
+        {
+            startAudioFinished = true;
+        }
+    }
+
+    private IEnumerator WaitForAudioEnd(float length)
+    {
+        yield return new WaitForSeconds(length);
+        startAudioFinished = true;
     }
 
     private void PlayCompletionAudio()
@@ -107,5 +129,4 @@ public class P4Manager : MonoBehaviour
     {
         return audioSource != null && audioSource.isPlaying && audioSource.clip == completionAudioClip;
     }
-
 }

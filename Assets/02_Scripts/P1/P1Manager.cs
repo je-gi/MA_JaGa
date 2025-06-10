@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using System.Collections;
 using System.Collections.Generic;
 
 public class P1Manager : MonoBehaviour
@@ -36,10 +37,15 @@ public class P1Manager : MonoBehaviour
 
     public bool activateManually = false;
 
+    [Header("Timing")]
+    public float introDelaySeconds = 2f;
+    public float postIntroTriggerDelay = 1f;
+
     private bool hasStarted = false;
     private bool hasTriggeredAudioPlayed = false;
     private bool puzzleCompleted = false;
     private bool revealAudioPlayed = false;
+    private bool canPlayTriggerAudio = false;
 
     void Start()
     {
@@ -70,7 +76,7 @@ public class P1Manager : MonoBehaviour
             activateManually = false;
         }
 
-        if (!hasTriggeredAudioPlayed && triggerZone != null && IsCameraInTrigger())
+        if (hasStarted && canPlayTriggerAudio && !hasTriggeredAudioPlayed && triggerZone != null && IsCameraInTrigger())
         {
             PlayClip(clipOnTriggerEntered);
             hasTriggeredAudioPlayed = true;
@@ -84,7 +90,21 @@ public class P1Manager : MonoBehaviour
     {
         if (hasStarted) return;
         hasStarted = true;
-        if (clipIntro != null) PlayClip(clipIntro);
+        StartCoroutine(PlayIntroWithDelay());
+    }
+
+    IEnumerator PlayIntroWithDelay()
+    {
+        yield return new WaitForSeconds(introDelaySeconds);
+        if (clipIntro != null)
+        {
+            audioSource.clip = clipIntro;
+            audioSource.Play();
+            yield return new WaitWhile(() => audioSource.isPlaying);
+        }
+
+        yield return new WaitForSeconds(postIntroTriggerDelay);
+        canPlayTriggerAudio = true;
     }
 
     void CheckPuzzleCompletion()
@@ -150,7 +170,7 @@ public class P1Manager : MonoBehaviour
 
     void OnObjectGrabbed(SelectEnterEventArgs args)
     {
-        if (!hasTriggeredAudioPlayed && clipOnObjectGrabbed != null)
+        if (!hasTriggeredAudioPlayed && clipOnObjectGrabbed != null && canPlayTriggerAudio)
         {
             PlayClip(clipOnObjectGrabbed);
             hasTriggeredAudioPlayed = true;

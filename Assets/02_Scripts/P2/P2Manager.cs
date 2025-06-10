@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using System.Collections.Generic;
+using System.Collections;
 
 public class P2Manager : MonoBehaviour
 {
@@ -21,12 +21,17 @@ public class P2Manager : MonoBehaviour
     [Header("Socket Checker")]
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
+    [Header("Timing Settings")]
+    [Tooltip("Delay (in seconds) before the start audio begins.")]
+    public float startAudioDelaySeconds = 2.0f;
+
     [Header("Debug")]
     public bool activateManually = false;
 
     private bool puzzleCompleted = false;
     private bool hasStarted = false;
     private bool hasTriggeredAudioPlayed = false;
+    private bool startAudioFinished = false;
 
     void Update()
     {
@@ -42,7 +47,7 @@ public class P2Manager : MonoBehaviour
             puzzleCompleted = true;
         }
 
-        if (!hasTriggeredAudioPlayed && triggerZone != null && IsCameraInTrigger())
+        if (hasStarted && startAudioFinished && !hasTriggeredAudioPlayed && triggerZone != null && IsCameraInTrigger())
         {
             PlayTriggerAreaAudio();
             hasTriggeredAudioPlayed = true;
@@ -59,17 +64,23 @@ public class P2Manager : MonoBehaviour
         if (hasStarted) return;
 
         hasStarted = true;
-        PlayStartAudio();
+        StartCoroutine(PlayStartAudioWithDelay());
     }
 
-    private void PlayStartAudio()
+    private IEnumerator PlayStartAudioWithDelay()
     {
+        yield return new WaitForSeconds(startAudioDelaySeconds);
+
         if (startAudioClip != null && audioSource != null)
         {
             audioSource.Stop();
             audioSource.clip = startAudioClip;
             audioSource.Play();
+
+            yield return new WaitWhile(() => audioSource.isPlaying);
         }
+
+        startAudioFinished = true;
     }
 
     private void PlayCompletionAudio()
@@ -105,7 +116,6 @@ public class P2Manager : MonoBehaviour
     {
         return audioSource != null && audioSource.isPlaying && audioSource.clip == completionAudioClip;
     }
-
 
     public bool IsPuzzleCompleted => puzzleCompleted;
 }

@@ -31,7 +31,7 @@ public class MainMenuManager : MonoBehaviour
 
         if (leftHand.TryGetFeatureValue(CommonUsages.menuButton, out menuButtonPressed))
         {
-            Debug.Log($"Menu button pressed: {menuButtonPressed}");
+            
 
             if (menuButtonPressed && !lastButtonState)
             {
