@@ -8,9 +8,6 @@ public class P4AudioManager : MonoBehaviour
     [Header("Audio Source")]
     public AudioSource audioSource;
 
-    // ---------------------------- //
-    //           HAND 1            //
-    // ---------------------------- //
     [Header("Hand 1 Objekte")]
     public GameObject h1p1;
     public GameObject h1p2;
@@ -44,29 +41,10 @@ public class P4AudioManager : MonoBehaviour
     private bool h1p4Grabbed = false;
     private bool h1s4Filled = false;
 
-    // ---------------------------- //
-    //           HAND 2            //
-    // ---------------------------- //
-    [Header("Hand 2 Start")]
-    public AudioClip hand2StartAudio;
-    private bool hand2StartPlayed = false;
+    [Header("VisibilityCallout Reference")]
+    public VisibilityCallout visibilityCallout;
 
-    [Header("Hand 2 Sockets")]
-    public XRSocketInteractor h2s1;
-    public XRSocketInteractor h2s2;
-    public XRSocketInteractor h2s3;
-    public XRSocketInteractor h2s4;
-
-    [Header("Hand 2 Audio")]
-    public AudioClip h2s1FilledAudio;
-    public AudioClip h2s2FilledAudio;
-    public AudioClip h2s3FilledAudio;
-    public AudioClip h2s4FilledAudio;
-
-    private bool h2s1Filled = false;
-    private bool h2s2Filled = false;
-    private bool h2s3Filled = false;
-    private bool h2s4Filled = false;
+    private bool h1s4FilledTriggered = false;
 
     void Start()
     {
@@ -77,7 +55,6 @@ public class P4AudioManager : MonoBehaviour
     void Update()
     {
         HandleHand1();
-        HandleHand2();
     }
 
     private void HandleHand1()
@@ -86,63 +63,18 @@ public class P4AudioManager : MonoBehaviour
         {
             PlayAudio(h1p1GrabAudio);
             h1p1Grabbed = true;
+
+            visibilityCallout?.SetCalloutVisibility("GameViewCallout", true);
+            visibilityCallout?.SetCalloutVisibility("HierarchyCallout", true);
         }
 
-        if (h1p1Grabbed && !h1s1Filled && h1s1 != null && h1s1.hasSelection)
-        {
-            PlayAudioOnce(ref h1s1Filled, h1s1FilledAudio);
-        }
-
-        if (h1s1Filled && !h1p2Grabbed && IsGrabbed(h1p2))
-        {
-            PlayAudio(h1p2GrabAudio);
-            h1p2Grabbed = true;
-        }
-
-        if (h1p2Grabbed && !h1s2Filled && h1s2 != null && h1s2.hasSelection)
-        {
-            PlayAudioOnce(ref h1s2Filled, h1s2FilledAudio);
-        }
-
-        if (h1s2Filled && !h1p3Grabbed && IsGrabbed(h1p3))
+        if (!h1p3Grabbed && IsGrabbed(h1p3))
         {
             PlayAudio(h1p3GrabAudio);
-            PlayAudio(materialChangeAudio);
             h1p3Grabbed = true;
+
+            visibilityCallout?.SetCalloutVisibility("InspectorCallout", true);
         }
-
-        if (h1p3Grabbed && !h1s3Filled && h1s3 != null && h1s3.hasSelection)
-        {
-            PlayAudioOnce(ref h1s3Filled, h1s3FilledAudio);
-        }
-
-        if (h1s3Filled && !h1p4Grabbed && IsGrabbed(h1p4))
-        {
-            PlayAudio(h1p4GrabAudio);
-            PlayAudio(shrinkAudio);
-            h1p4Grabbed = true;
-        }
-
-        if (h1p4Grabbed && !h1s4Filled && h1s4 != null && h1s4.hasSelection)
-        {
-            PlayAudioOnce(ref h1s4Filled, h1s4FilledAudio);
-            PlayAudioOnce(ref hand2StartPlayed, hand2StartAudio);
-        }
-    }
-
-    private void HandleHand2()
-    {
-        if (!h2s1Filled && h2s1 != null && h2s1.hasSelection)
-            PlayAudioOnce(ref h2s1Filled, h2s1FilledAudio);
-
-        if (h2s1Filled && !h2s2Filled && h2s2 != null && h2s2.hasSelection)
-            PlayAudioOnce(ref h2s2Filled, h2s2FilledAudio);
-
-        if (h2s2Filled && !h2s3Filled && h2s3 != null && h2s3.hasSelection)
-            PlayAudioOnce(ref h2s3Filled, h2s3FilledAudio);
-
-        if (h2s3Filled && !h2s4Filled && h2s4 != null && h2s4.hasSelection)
-            PlayAudioOnce(ref h2s4Filled, h2s4FilledAudio);
     }
 
     private bool IsGrabbed(GameObject obj)
@@ -161,12 +93,12 @@ public class P4AudioManager : MonoBehaviour
         }
     }
 
-    private void PlayAudioOnce(ref bool flag, AudioClip clip)
+    public void DeactivateAllCallouts()
     {
-        if (!flag && clip != null)
-        {
-            PlayAudio(clip);
-            flag = true;
-        }
+        if (visibilityCallout == null) return;
+
+        visibilityCallout.SetCalloutVisibility("GameViewCallout", false);
+        visibilityCallout.SetCalloutVisibility("HierarchyCallout", false);
+        visibilityCallout.SetCalloutVisibility("InspectorCallout", false);
     }
 }

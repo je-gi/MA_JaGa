@@ -23,13 +23,18 @@ public class P4Manager : MonoBehaviour
     public bool activateManually = false;
 
     [Header("Start Sound Delay")]
-    [Tooltip("Seconds to wait before playing the start sound")]
     public float startDelay = 2f;
+
+    [Header("VisibilityCallout Reference")]
+    public VisibilityCallout visibilityCallout;
 
     private bool puzzleCompleted = false;
     private bool hasStarted = false;
     private bool hasTriggeredAudioPlayed = false;
     private bool startAudioFinished = false;
+
+    private bool structureCalloutShown = false;
+    private bool projectFolderCalloutShown = false;
 
     void Update()
     {
@@ -43,12 +48,39 @@ public class P4Manager : MonoBehaviour
         {
             PlayCompletionAudio();
             puzzleCompleted = true;
+
+            if (visibilityCallout != null)
+            {
+                visibilityCallout.SetCalloutVisibility("StructureCallout", false);
+                visibilityCallout.SetCalloutVisibility("ProjectFolderCallout", false);
+                visibilityCallout.SetCalloutVisibility("GameViewCallout", false);
+                visibilityCallout.SetCalloutVisibility("HierarchyCallout", false);
+                visibilityCallout.SetCalloutVisibility("InspectorCallout", false);
+            }
         }
 
         if (!hasTriggeredAudioPlayed && hasStarted && startAudioFinished && triggerZone != null && IsCameraInTrigger())
         {
             PlayTriggerAreaAudio();
             hasTriggeredAudioPlayed = true;
+
+            if (visibilityCallout != null)
+            {
+                visibilityCallout.SetCalloutVisibility("StructureCallout", true);
+                structureCalloutShown = true;
+            }
+        }
+
+        if (structureCalloutShown && startAudioFinished && hasTriggeredAudioPlayed && !projectFolderCalloutShown && !audioSource.isPlaying)
+        {
+            if (visibilityCallout != null)
+            {
+                visibilityCallout.SetCalloutVisibility("ProjectFolderCallout", true);
+                projectFolderCalloutShown = true;
+
+                visibilityCallout.SetCalloutVisibility("StructureCallout", false);
+                structureCalloutShown = false;
+            }
         }
     }
 
