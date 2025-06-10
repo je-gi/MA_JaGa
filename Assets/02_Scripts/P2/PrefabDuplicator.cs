@@ -16,13 +16,20 @@ public class PrefabDuplicator : MonoBehaviour
 
     private GameObject selectedPrefab;
 
-    [Header("Optional: GlassesShow (falls benötigt)")]
+    [Header("Optional: GlassesShow")]
     public GlassesShow glassesShow;
 
-    [Header("Audio beim ersten Spawn")]
+    [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip firstSpawnAudio;
     private bool hasSpawnedOnce = false;
+
+    [Header("Callouts")]
+    public VisibilityCallout visibilityCallout;
+    private bool animationCalloutShown = false;
+
+    [Header("Puzzle")]
+    public P2Manager p2Manager;
 
     private void Start()
     {
@@ -36,27 +43,18 @@ public class PrefabDuplicator : MonoBehaviour
             if (variantSocketInteractor.hasSelection)
             {
                 var selectedInteractable = variantSocketInteractor.GetOldestInteractableSelected();
-
                 if (selectedInteractable != null)
                 {
                     GameObject variantObject = selectedInteractable.transform.gameObject;
 
                     if (variantObject.CompareTag("Variant01"))
-                    {
                         selectedPrefab = variantPrefab1;
-                    }
                     else if (variantObject.CompareTag("Variant02"))
-                    {
                         selectedPrefab = variantPrefab2;
-                    }
                     else if (variantObject.CompareTag("Variant03"))
-                    {
                         selectedPrefab = variantPrefab3;
-                    }
                     else if (variantObject.CompareTag("Variant04"))
-                    {
                         selectedPrefab = variantPrefab4;
-                    }
                 }
             }
             else
@@ -69,6 +67,11 @@ public class PrefabDuplicator : MonoBehaviour
             if (!hasSpawnedOnce)
             {
                 PlayAudio();
+                if (visibilityCallout != null)
+                {
+                    visibilityCallout.SetCalloutVisibility("AnimationCallout", true);
+                    animationCalloutShown = true;
+                }
                 hasSpawnedOnce = true;
             }
 
@@ -88,6 +91,15 @@ public class PrefabDuplicator : MonoBehaviour
 
             audioSource.clip = firstSpawnAudio;
             audioSource.Play();
+        }
+    }
+
+    private void Update()
+    {
+        if (animationCalloutShown && p2Manager != null && p2Manager.IsPuzzleCompleted)
+        {
+            visibilityCallout.SetCalloutVisibility("AnimationCallout", false);
+            animationCalloutShown = false;
         }
     }
 }

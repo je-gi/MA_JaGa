@@ -13,6 +13,14 @@ public class LayerChangeOnSocket : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip layerChangeAudio;
 
+    [Header("Callout Steuerung")]
+    [SerializeField] private VisibilityCallout visibilityCallout;
+
+    [Header("Puzzle Completion")]
+    [SerializeField] private P2Manager puzzleManager;
+
+    private bool calloutShown = false;
+
     public void ChangeLayerInSocket()
     {
         if (socketInteractor.hasSelection)
@@ -48,6 +56,7 @@ public class LayerChangeOnSocket : MonoBehaviour
                 Debug.Log("Added interaction layer.");
 
                 PlayAudio();
+                ShowPrefabCallout();
             }
             else
             {
@@ -70,6 +79,27 @@ public class LayerChangeOnSocket : MonoBehaviour
 
             audioSource.clip = layerChangeAudio;
             audioSource.Play();
+        }
+    }
+
+    private void ShowPrefabCallout()
+    {
+        if (visibilityCallout != null && !calloutShown)
+        {
+            visibilityCallout.SetCalloutVisibility("PrefabCallout", true);
+            calloutShown = true;
+        }
+    }
+
+    private void Update()
+    {
+        if (calloutShown && puzzleManager != null && puzzleManager.IsPuzzleCompleted)
+        {
+            if (visibilityCallout != null)
+            {
+                visibilityCallout.SetCalloutVisibility("PrefabCallout", false);
+                calloutShown = false;
+            }
         }
     }
 }

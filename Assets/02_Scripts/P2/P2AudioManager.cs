@@ -34,13 +34,17 @@ public class P2AudioManager : MonoBehaviour
     private int documentsInTrigger = 0;
     private HashSet<GameObject> alreadyTriggered = new HashSet<GameObject>();
 
-    [Header("Prefab-Audio bei Spawn")]
-    public GameObject specialPrefab;
-    public AudioClip prefabSpawnAudio;
-    private bool prefabSoundPlayed = false;
-
     [Header("Sockets mit Audio bei erster Befüllung")]
     public List<SocketAudioPair> socketAudioPairs = new List<SocketAudioPair>();
+
+    [Header("Callout Steuerung")]
+    public VisibilityCallout visibilityCallout;
+    public XRSocketInteractor glassesSocket;
+
+    [Header("Puzzle Manager Referenz")]
+    public P2Manager puzzleManager;
+
+    private bool callout3DObjectsShown = false;
 
     void Start()
     {
@@ -66,15 +70,30 @@ public class P2AudioManager : MonoBehaviour
                 {
                     PlayAudio(firstDocumentGrabAudio);
                     documentGrabAudioPlayed = true;
+
+                    if (callout3DObjectsShown && visibilityCallout != null)
+                    {
+                        visibilityCallout.SetCalloutVisibility("3DObjectsCallout", false);
+                        callout3DObjectsShown = false;
+                    }
+
                     break;
                 }
             }
         }
 
-        if (!prefabSoundPlayed && GameObject.Find(specialPrefab.name + "(Clone)") != null)
+        if (glassesSocket != null)
         {
-            PlayAudio(prefabSpawnAudio);
-            prefabSoundPlayed = true;
+            if (glassesSocket.hasSelection && !callout3DObjectsShown)
+            {
+                visibilityCallout.SetCalloutVisibility("3DObjectsCallout", true);
+                callout3DObjectsShown = true;
+            }
+            else if (callout3DObjectsShown && puzzleManager != null && puzzleManager.IsPuzzleCompleted)
+            {
+                visibilityCallout.SetCalloutVisibility("3DObjectsCallout", false);
+                callout3DObjectsShown = false;
+            }
         }
 
         foreach (var pair in socketAudioPairs)
