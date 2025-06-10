@@ -22,6 +22,7 @@ public class P1Manager : MonoBehaviour
     public SocketChecking socketChecker;
     public GameObject objectToTrack1;
     public XRSocketInteractor socketToEnableAfterSuccess;
+    public XRSocketInteractor headphoneSocket;
 
     [System.Serializable]
     public class SocketAudioPair
@@ -35,6 +36,8 @@ public class P1Manager : MonoBehaviour
     public ShowObjectsWhenSocketsFilled showObjectsScript;
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
+    public VisibilityCallout visibilityCallout;
+
     public bool activateManually = false;
 
     [Header("Timing")]
@@ -46,6 +49,9 @@ public class P1Manager : MonoBehaviour
     private bool puzzleCompleted = false;
     private bool revealAudioPlayed = false;
     private bool canPlayTriggerAudio = false;
+
+    private bool triggerClipFinished = false;
+    private bool successClipFinished = false;
 
     void Start()
     {
@@ -78,12 +84,17 @@ public class P1Manager : MonoBehaviour
 
         if (hasStarted && canPlayTriggerAudio && !hasTriggeredAudioPlayed && triggerZone != null && IsCameraInTrigger())
         {
-            PlayClip(clipOnTriggerEntered);
+            PlayClipWithCallback(clipOnTriggerEntered, OnTriggerClipFinished);
             hasTriggeredAudioPlayed = true;
         }
 
         CheckPuzzleCompletion();
         CheckRevealObjectsFromExternalScript();
+
+        if (successClipFinished && headphoneSocket != null && headphoneSocket.GetOldestInteractableSelected() != null)
+        {
+            HideCallout("AudioListenerCallout");
+        }
     }
 
     void StartPuzzle()
@@ -142,13 +153,34 @@ public class P1Manager : MonoBehaviour
         }
     }
 
+    void PlayClipWithCallback(AudioClip clip, System.Action onComplete)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.Stop();
+            audioSource.clip = clip;
+            audioSource.Play();
+            StartCoroutine(WaitAndCallback(clip.length, onComplete));
+        }
+    }
+
+    IEnumerator WaitAndCallback(float time, System.Action callback)
+    {
+        yield return new WaitForSeconds(time);
+        callback?.Invoke();
+    }
+
     void OnPuzzleStatusChanged(bool isCompleted)
     {
         if (isCompleted)
         {
-            PlayClip(clipOnSuccess);
+            PlayClipWithCallback(clipOnSuccess, OnSuccessClipFinished);
             if (objectToTrack1 != null) objectToTrack1.SetActive(true);
             if (socketToEnableAfterSuccess != null) socketToEnableAfterSuccess.gameObject.SetActive(true);
+
+            // Callouts ausblenden
+            HideCallout("AudioClipCallout");
+            HideCallout("AudioSourceCallout");
         }
         else
         {
@@ -191,6 +223,31 @@ public class P1Manager : MonoBehaviour
             PlayClip(clipOnRevealObjects);
             revealAudioPlayed = true;
         }
+    }
+
+    void OnTriggerClipFinished()
+    {
+        triggerClipFinished = true;
+        ShowCallout("AudioClipCallout");
+        ShowCallout("AudioSourceCallout");
+    }
+
+    void OnSuccessClipFinished()
+    {
+        successClipFinished = true;
+        ShowCallout("AudioListenerCallout");
+    }
+
+    void ShowCallout(string key)
+    {
+        if (visibilityCallout != null)
+            visibilityCallout.SetCalloutVisibility(key, true);
+    }
+
+    void HideCallout(string key)
+    {
+        if (visibilityCallout != null)
+            visibilityCallout.SetCalloutVisibility(key, false);
     }
 
     public bool IsPuzzleCompleted => puzzleCompleted;
