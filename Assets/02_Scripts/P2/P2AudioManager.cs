@@ -45,6 +45,8 @@ public class P2AudioManager : MonoBehaviour
     public P2Manager puzzleManager;
 
     private bool callout3DObjectsShown = false;
+    private bool hasShown3DObjectsCallout = false;
+    private bool puzzleCompletedHandled = false;
 
     void Start()
     {
@@ -82,18 +84,22 @@ public class P2AudioManager : MonoBehaviour
             }
         }
 
-        if (glassesSocket != null)
+        // === 3DObjects Callout ===
+        if (puzzleManager != null && puzzleManager.IsPuzzleCompleted && !puzzleCompletedHandled)
         {
-            if (glassesSocket.hasSelection && !callout3DObjectsShown)
-            {
-                visibilityCallout.SetCalloutVisibility("3DObjectsCallout", true);
-                callout3DObjectsShown = true;
-            }
-            else if (callout3DObjectsShown && puzzleManager != null && puzzleManager.IsPuzzleCompleted)
+            if (callout3DObjectsShown)
             {
                 visibilityCallout.SetCalloutVisibility("3DObjectsCallout", false);
                 callout3DObjectsShown = false;
             }
+
+            puzzleCompletedHandled = true; // blockt weitere Anzeige
+        }
+        else if (!hasShown3DObjectsCallout && glassesSocket != null && glassesSocket.hasSelection && !puzzleCompletedHandled)
+        {
+            visibilityCallout.SetCalloutVisibility("3DObjectsCallout", true);
+            callout3DObjectsShown = true;
+            hasShown3DObjectsCallout = true;
         }
 
         foreach (var pair in socketAudioPairs)
