@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class FadeScreen : MonoBehaviour
@@ -21,7 +21,7 @@ public class FadeScreen : MonoBehaviour
         rend.material.SetColor("_Color", c);
 
         if (fadeOnStart)
-            FadeIn(true); 
+            FadeIn(true);
     }
 
     public void FadeIn(bool disableAfter = false)

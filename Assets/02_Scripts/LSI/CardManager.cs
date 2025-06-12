@@ -12,7 +12,10 @@ public class CardManager : MonoBehaviour
     public GameObject nextButton;
 
     public TMP_Text infoText;
+    public TMP_Text secondaryInfoText;
+
     public string[] setDescriptions;
+    public string[] secondarySetDescriptions;
 
     public AudioClip successClip;
     public AudioClip failClip;
@@ -48,6 +51,18 @@ public class CardManager : MonoBehaviour
             else
             {
                 infoText.text = "";
+            }
+
+            if (secondaryInfoText != null)
+            {
+                if (setIndex < secondarySetDescriptions.Length)
+                {
+                    secondaryInfoText.text = secondarySetDescriptions[setIndex];
+                }
+                else
+                {
+                    secondaryInfoText.text = "";
+                }
             }
         }
     }

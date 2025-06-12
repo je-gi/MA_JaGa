@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.XR;
+using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -101,4 +102,10 @@ public class MainMenuManager : MonoBehaviour
         soundPanel.SetActive(false);
         controlsPanel.SetActive(false);
     }
+    public void LoadStartScene()
+    {
+        Debug.Log("Scene load   triggered!");
+        SceneManager.LoadScene(0);
+    }
+
 }
