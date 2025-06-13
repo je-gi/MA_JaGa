@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class StationManager : MonoBehaviour
 {
     public GameObject[] stationPanels;
+    public GameObject stationOverviewExtraPanel;
     public GameObject[] miniGames;
     public Button[] levelButtons;
 
@@ -23,15 +24,17 @@ public class StationManager : MonoBehaviour
 
     private int activeMiniGameIndex = -1;
 
-    private void Start()
-    {
-        ShowStationPanels();
-    }
+    private void Start() { }
 
     public void OnStationButtonClicked(int index)
     {
         if (levelButtons[index].interactable)
         {
+            if (RepairStationIntroduction.instance != null)
+            {
+                RepairStationIntroduction.instance.InterruptIntroAndHidePanels();
+            }
+
             PlayMiniGameSound(index);
             HideStationPanels();
             ShowMiniGame(index);
@@ -45,12 +48,18 @@ public class StationManager : MonoBehaviour
 
         foreach (var miniGame in miniGames)
             miniGame.SetActive(false);
+
+        if (stationOverviewExtraPanel != null)
+            stationOverviewExtraPanel.SetActive(true);
     }
 
     private void HideStationPanels()
     {
         foreach (var panel in stationPanels)
             panel.SetActive(false);
+
+        if (stationOverviewExtraPanel != null)
+            stationOverviewExtraPanel.SetActive(false);
     }
 
     private void ShowMiniGame(int index)
@@ -62,18 +71,10 @@ public class StationManager : MonoBehaviour
 
             switch (index)
             {
-                case 0:
-                    ShowAdditionalObjects(miniGame1AdditionalObjects);
-                    break;
-                case 1:
-                    ShowAdditionalObjects(miniGame2AdditionalObjects);
-                    break;
-                case 2:
-                    ShowAdditionalObjects(miniGame3AdditionalObjects);
-                    break;
-                case 3:
-                    ShowAdditionalObjects(miniGame4AdditionalObjects);
-                    break;
+                case 0: ShowAdditionalObjects(miniGame1AdditionalObjects); break;
+                case 1: ShowAdditionalObjects(miniGame2AdditionalObjects); break;
+                case 2: ShowAdditionalObjects(miniGame3AdditionalObjects); break;
+                case 3: ShowAdditionalObjects(miniGame4AdditionalObjects); break;
             }
         }
     }
@@ -83,10 +84,7 @@ public class StationManager : MonoBehaviour
         if (additionalObjects != null)
         {
             foreach (var obj in additionalObjects)
-            {
-                if (obj != null)
-                    obj.SetActive(true);
-            }
+                if (obj != null) obj.SetActive(true);
         }
     }
 
@@ -95,10 +93,7 @@ public class StationManager : MonoBehaviour
         if (additionalObjects != null)
         {
             foreach (var obj in additionalObjects)
-            {
-                if (obj != null)
-                    obj.SetActive(false);
-            }
+                if (obj != null) obj.SetActive(false);
         }
     }
 
@@ -115,40 +110,31 @@ public class StationManager : MonoBehaviour
 
             PanelStateController.instance.OnLevelCompleted(activeMiniGameIndex);
             miniGames[activeMiniGameIndex].SetActive(false);
-            ShowStationPanels();
             PlaySuccessSound();
 
             switch (activeMiniGameIndex)
             {
-                case 0:
-                    HideAdditionalObjects(miniGame1AdditionalObjects);
-                    break;
-                case 1:
-                    HideAdditionalObjects(miniGame2AdditionalObjects);
-                    break;
-                case 2:
-                    HideAdditionalObjects(miniGame3AdditionalObjects);
-                    break;
-                case 3:
-                    HideAdditionalObjects(miniGame4AdditionalObjects);
-                    break;
+                case 0: HideAdditionalObjects(miniGame1AdditionalObjects); break;
+                case 1: HideAdditionalObjects(miniGame2AdditionalObjects); break;
+                case 2: HideAdditionalObjects(miniGame3AdditionalObjects); break;
+                case 3: HideAdditionalObjects(miniGame4AdditionalObjects); break;
             }
 
-            bool allLevelsDone = true;
-            foreach (var btn in levelButtons)
+            ShowStationPanels();
+
+            if (activeMiniGameIndex == 3 && repairStationCompletion != null)
             {
-                if (btn.interactable)
-                {
-                    allLevelsDone = false;
-                    break;
-                }
+                StartCoroutine(TriggerCompletionAfterDelay(2f));
             }
 
-            if (allLevelsDone && repairStationCompletion != null)
-            {
-                repairStationCompletion.TriggerCompletionManually();
-            }
+            activeMiniGameIndex = -1;
         }
+    }
+
+    private System.Collections.IEnumerator TriggerCompletionAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        repairStationCompletion.TriggerCompletionManually();
     }
 
     private void PlayMiniGameSound(int index)

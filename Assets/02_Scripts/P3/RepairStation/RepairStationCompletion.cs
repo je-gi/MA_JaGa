@@ -6,9 +6,10 @@ public class RepairStationCompletion : MonoBehaviour
     public PanelStateController panelStateController;
     public GameObject canvasToHide;
     public GameObject bootsObject;
-    public GameObject objectToShow;
     public GameObject objectToHide;
-    public AudioSource snailAudio;
+
+    public AudioSource snailAudioSource;
+    public AudioClip snailClip; 
 
     private bool completionTriggered = false;
 
@@ -37,17 +38,15 @@ public class RepairStationCompletion : MonoBehaviour
         if (canvasToHide != null)
             canvasToHide.SetActive(false);
 
-        if (snailAudio != null)
+        if (snailAudioSource != null && snailClip != null)
         {
-            snailAudio.Play();
-            yield return new WaitForSeconds(snailAudio.clip.length);
+            snailAudioSource.clip = snailClip;
+            snailAudioSource.Play();
+            yield return new WaitForSeconds(snailClip.length);
         }
 
         if (bootsObject != null)
             bootsObject.SetActive(true);
-
-        if (objectToShow != null)
-            objectToShow.SetActive(true);
 
         if (objectToHide != null)
             objectToHide.SetActive(false);
