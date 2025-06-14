@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
     public GameObject cardManagerObject;
 
     [Header("Objekte, die nach LSI ausgeblendet werden sollen")]
+    public GameObject[] objectsToHideOnLSIComplete;
+
+    [Header("Objekte, die beim Start des ersten Puzzles ausgeblendet werden sollen")]
     public GameObject[] objectsToHideOnFirstPuzzleStart;
 
     [Header("LSI-Komponenten")]
@@ -95,6 +98,8 @@ public class GameManager : MonoBehaviour
         if (learningTypeCalculator != null)
             learningTypeCalculator.ShowLearningTypeObject(learningType);
 
+        HideObjectsOnLSIComplete();
+
         if (audioSource != null && lsiAudioClip != null)
         {
             audioSource.clip = lsiAudioClip;
@@ -106,6 +111,26 @@ public class GameManager : MonoBehaviour
         if (!firstPuzzleStarted)
         {
             StartCoroutine(WaitForObjectInSocketAndStartPuzzle());
+        }
+    }
+
+    private void HideObjectsOnLSIComplete()
+    {
+        if (objectsToHideOnLSIComplete != null)
+        {
+            foreach (var obj in objectsToHideOnLSIComplete)
+                if (obj != null)
+                    obj.SetActive(false);
+        }
+    }
+
+    private void HideInitialObjects()
+    {
+        if (objectsToHideOnFirstPuzzleStart != null)
+        {
+            foreach (var obj in objectsToHideOnFirstPuzzleStart)
+                if (obj != null)
+                    obj.SetActive(false);
         }
     }
 
@@ -125,16 +150,6 @@ public class GameManager : MonoBehaviour
 
         firstPuzzleStarted = true;
         StartNextPuzzle();
-    }
-
-    private void HideInitialObjects()
-    {
-        if (objectsToHideOnFirstPuzzleStart != null)
-        {
-            foreach (var obj in objectsToHideOnFirstPuzzleStart)
-                if (obj != null)
-                    obj.SetActive(false);
-        }
     }
 
     private void SetPuzzleOrder(string learningType)
@@ -204,24 +219,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayFinalAudioAndEnd()
-    {
-        if (finalPuzzleCompletedAudioClip != null && audioSource != null)
-        {
-            audioSource.clip = finalPuzzleCompletedAudioClip;
-            audioSource.Play();
-            yield return new WaitWhile(() => audioSource.isPlaying);
-        }
-
-        if (introManager != null && introManager.fadeScreen != null)
-        {
-            introManager.fadeScreen.FadeOut();
-            yield return new WaitForSeconds(introManager.fadeScreen.fadeOutDuration);
-        }
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-
     private IEnumerator WaitForPuzzleCompletion(MonoBehaviour puzzleManager)
     {
         if (puzzleManager is P1Manager p1Manager)
@@ -243,5 +240,23 @@ public class GameManager : MonoBehaviour
             yield return new WaitWhile(() => p4m.IsCompletionAudioPlaying());
 
         StartNextPuzzle();
+    }
+
+    private IEnumerator PlayFinalAudioAndEnd()
+    {
+        if (finalPuzzleCompletedAudioClip != null && audioSource != null)
+        {
+            audioSource.clip = finalPuzzleCompletedAudioClip;
+            audioSource.Play();
+            yield return new WaitWhile(() => audioSource.isPlaying);
+        }
+
+        if (introManager != null && introManager.fadeScreen != null)
+        {
+            introManager.fadeScreen.FadeOut();
+            yield return new WaitForSeconds(introManager.fadeScreen.fadeOutDuration);
+        }
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
