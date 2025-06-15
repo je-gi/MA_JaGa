@@ -8,6 +8,7 @@ public class SnailGrab : MonoBehaviour
     public AudioClip wakeUpSpeech;
     public XRGrabInteractable snailGrabInteractable;
     public Rigidbody snailRigidbody;
+    public bool HasSpoken => hasSpoken;
 
     [Header("GameObjects To Switch")]
     public GameObject objectToDisable;

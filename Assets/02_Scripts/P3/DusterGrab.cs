@@ -1,17 +1,16 @@
 using UnityEngine;
+using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class DusterGrab : MonoBehaviour
 {
-    [Header("Audio beim ersten Grab")]
     public AudioSource audioSource;
     public AudioClip grabAudio;
-
-    [Header("Snail & Abstaub-Einstellungen")]
     public SnailGrab snail;
     public float minMoveDistance = 0.1f;
     public int requiredDustings = 5;
+    public VisualEffect dustVFX;
 
     private XRGrabInteractable grabInteractable;
     private bool isBeingUsed = false;
@@ -44,15 +43,23 @@ public class DusterGrab : MonoBehaviour
 
     private void Update()
     {
-        if (isBeingUsed && isTouchingSnail && DetectDustingMotion())
+        if (isBeingUsed && isTouchingSnail && !snail.HasSpoken && DetectDustingMotion())
         {
-            dustingCounter++;
-            lastPosition = transform.position;
-
-            if (dustingCounter >= requiredDustings)
+            if (dustingCounter < requiredDustings)
             {
-                snail.WakeUp();
-                isBeingUsed = false;
+                dustingCounter++;
+                lastPosition = transform.position;
+
+                if (dustVFX != null)
+                {
+                    dustVFX.Play();
+                }
+
+                if (dustingCounter >= requiredDustings)
+                {
+                    snail.WakeUp();
+                    isBeingUsed = false;
+                }
             }
         }
     }
