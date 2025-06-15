@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
@@ -15,6 +16,10 @@ public class LearningTypeCalculator : MonoBehaviour
     public GameObject divergingObject;
     public GameObject convergingObject;
     public GameObject assimilatingObject;
+
+    public AudioSource audioSource;
+    public AudioClip showEffectSound;
+    public VisualEffect particleEffect;
 
     public void AddScores(XRSocketInteractor[] sockets)
     {
@@ -78,6 +83,13 @@ public class LearningTypeCalculator : MonoBehaviour
 
     public void ShowLearningTypeObject(string learningType)
     {
+        StartCoroutine(ShowWithDelay(learningType));
+    }
+
+    private IEnumerator ShowWithDelay(string learningType)
+    {
+        yield return new WaitForSeconds(1f);
+
         accommodatingObject.SetActive(false);
         divergingObject.SetActive(false);
         convergingObject.SetActive(false);
@@ -99,6 +111,16 @@ public class LearningTypeCalculator : MonoBehaviour
                 break;
             default:
                 break;
+        }
+
+        if (audioSource != null && showEffectSound != null)
+        {
+            audioSource.PlayOneShot(showEffectSound);
+        }
+
+        if (particleEffect != null)
+        {
+            particleEffect.Play();
         }
     }
 }
