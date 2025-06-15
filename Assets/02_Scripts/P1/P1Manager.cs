@@ -57,7 +57,8 @@ public class P1Manager : MonoBehaviour
     {
         foreach (var pair in socketAudioPairs)
         {
-            pair.socket.selectEntered.AddListener((SelectEnterEventArgs args) => OnSocketFilled(pair));
+            SocketAudioPair currentPair = pair;
+            currentPair.socket.selectEntered.AddListener((SelectEnterEventArgs args) => OnSocketFilled(currentPair));
         }
 
         if (objectToTrack1 != null)
@@ -178,7 +179,6 @@ public class P1Manager : MonoBehaviour
             if (objectToTrack1 != null) objectToTrack1.SetActive(true);
             if (socketToEnableAfterSuccess != null) socketToEnableAfterSuccess.gameObject.SetActive(true);
 
-            // Callouts ausblenden
             HideCallout("AudioClipCallout");
             HideCallout("AudioSourceCallout");
         }
@@ -197,12 +197,12 @@ public class P1Manager : MonoBehaviour
         }
 
         if (objectToTrack1 != null &&
-            pair.socket.firstInteractableSelected != null &&
-            pair.socket.firstInteractableSelected.transform == objectToTrack1.transform)
+            pair.socket.GetOldestInteractableSelected() != null &&
+            pair.socket.GetOldestInteractableSelected().transform == objectToTrack1.transform)
         {
             if (showObjectsScript != null && !showObjectsScript.AlreadyShown)
             {
-                showObjectsScript.ShowAndAnimate();
+                showObjectsScript.StartSequence();
             }
         }
     }
@@ -220,8 +220,20 @@ public class P1Manager : MonoBehaviour
     {
         if (showObjectsScript != null && showObjectsScript.AlreadyShown && !revealAudioPlayed)
         {
-            PlayClip(clipOnRevealObjects);
             revealAudioPlayed = true;
+            StartCoroutine(PlayRevealClipWithDelay());
+        }
+    }
+
+    IEnumerator PlayRevealClipWithDelay()
+    {
+        yield return new WaitForSeconds(1f);
+
+        if (clipOnRevealObjects != null && audioSource != null)
+        {
+            audioSource.Stop();
+            audioSource.clip = clipOnRevealObjects;
+            audioSource.Play();
         }
     }
 

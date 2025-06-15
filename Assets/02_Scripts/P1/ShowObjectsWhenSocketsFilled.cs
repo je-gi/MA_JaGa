@@ -1,6 +1,8 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.VFX;
 
 public class ShowObjectsWhenSocketsFilled : MonoBehaviour
 {
@@ -13,6 +15,14 @@ public class ShowObjectsWhenSocketsFilled : MonoBehaviour
     public string startTrigger = "HeadphonesOn";
     public string stopTrigger = "StopSpin";
 
+    public GameObject objectToHideAfterDelay;
+    public List<GameObject> objectsToShowAfterDelay;
+
+    public AudioSource audioSource;
+    public AudioClip showSound;
+
+    public VisualEffect particleEffect;
+
     private bool alreadyShown = false;
     public bool AlreadyShown => alreadyShown;
 
@@ -20,26 +30,43 @@ public class ShowObjectsWhenSocketsFilled : MonoBehaviour
     {
         if (!alreadyShown && triggerSocket.GetOldestInteractableSelected() != null)
         {
-            ShowAndAnimate();
+            StartSequence();
         }
     }
 
-    public void ShowAndAnimate()
+    public void StartSequence()
     {
         if (alreadyShown) return;
+        alreadyShown = true;
+        StartCoroutine(ShowSequence());
+    }
 
-        foreach (var go in objectsToShow)
-            if (go != null) go.SetActive(true);
-
-        foreach (var go in objectsToHide)
-            if (go != null) go.SetActive(false);
-
+    private IEnumerator ShowSequence()
+    {
         if (loopingAnimator != null)
         {
             loopingAnimator.SetTrigger(startTrigger);
         }
 
-        alreadyShown = true;
+        yield return new WaitForSeconds(1f);
+
+        foreach (var go in objectsToHide)
+            if (go != null) go.SetActive(false);
+
+        foreach (var go in objectsToShow)
+            if (go != null) go.SetActive(true);
+
+        if (objectToHideAfterDelay != null)
+            objectToHideAfterDelay.SetActive(false);
+
+        foreach (var go in objectsToShowAfterDelay)
+            if (go != null) go.SetActive(true);
+
+        if (audioSource != null && showSound != null)
+            audioSource.PlayOneShot(showSound);
+
+        if (particleEffect != null)
+            particleEffect.Play();
     }
 
     public void StopAnimation()
