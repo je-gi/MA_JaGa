@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.VFX;
 
 public class EyeFusion : MonoBehaviour
 {
@@ -31,8 +32,12 @@ public class EyeFusion : MonoBehaviour
     public GameObject prefabGreenMedium;
     public GameObject prefabGreenLarge;
 
-    private List<GameObject> eyesInTrigger = new List<GameObject>();
+    [Header("Effekte beim Spawnen des neuen Auges")]
+    public AudioSource spawnAudioSource;
+    public AudioClip spawnSound;
+    public VisualEffect spawnVFX;
 
+    private List<GameObject> eyesInTrigger = new List<GameObject>();
     public GlassesShow glassesShow;
 
     private void OnTriggerEnter(Collider other)
@@ -97,6 +102,15 @@ public class EyeFusion : MonoBehaviour
             {
                 glassesShow.RegisterEyeObject(newEye);
             }
+
+            if (spawnAudioSource != null && spawnSound != null)
+                spawnAudioSource.PlayOneShot(spawnSound);
+
+            if (spawnVFX != null)
+            {
+                spawnVFX.transform.position = fusionPoint.position;
+                spawnVFX.Play();
+            }
         }
         else
         {
@@ -106,7 +120,6 @@ public class EyeFusion : MonoBehaviour
 
     private string GetColorResult(string tag1, string tag2)
     {
-        // Orange
         if ((tag1.Contains("Orange") && tag2.Contains("Orange")) ||
             (tag1.Contains("Yellow") && tag2.Contains("Red")) ||
             (tag1.Contains("Red") && tag2.Contains("Yellow")) ||
@@ -116,7 +129,6 @@ public class EyeFusion : MonoBehaviour
             (tag1.Contains("Purple") && tag2.Contains("Orange")))
             return "Orange";
 
-        // Purple
         if ((tag1.Contains("Purple") && tag2.Contains("Purple")) ||
             (tag1.Contains("Red") && tag2.Contains("Blue")) ||
             (tag1.Contains("Blue") && tag2.Contains("Red")) ||
@@ -126,7 +138,6 @@ public class EyeFusion : MonoBehaviour
             (tag1.Contains("Red") && tag2.Contains("Green")))
             return "Purple";
 
-        // Green
         if ((tag1.Contains("Green") && tag2.Contains("Green")) ||
             (tag1.Contains("Yellow") && tag2.Contains("Blue")) ||
             (tag1.Contains("Blue") && tag2.Contains("Yellow")) ||
@@ -136,19 +147,16 @@ public class EyeFusion : MonoBehaviour
             (tag1.Contains("Orange") && tag2.Contains("Blue")))
             return "Green";
 
-        // Yellow
         if ((tag1.Contains("Yellow") && tag2.Contains("Yellow")) ||
             (tag1.Contains("Yellow") && tag2.Contains("Orange")) ||
             (tag1.Contains("Orange") && tag2.Contains("Yellow")))
             return "Yellow";
 
-        // Red
         if ((tag1.Contains("Red") && tag2.Contains("Red")) ||
             (tag1.Contains("Purple") && tag2.Contains("Red")) ||
             (tag1.Contains("Red") && tag2.Contains("Purple")))
             return "Red";
 
-        // Blue
         if ((tag1.Contains("Blue") && tag2.Contains("Blue")) ||
             (tag1.Contains("Purple") && tag2.Contains("Green")) ||
             (tag1.Contains("Green") && tag2.Contains("Purple")))

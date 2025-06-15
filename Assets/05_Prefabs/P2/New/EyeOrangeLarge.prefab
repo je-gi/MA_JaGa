@@ -99,7 +99,8 @@ GameObject:
   - component: {fileID: 5304011021150303941}
   - component: {fileID: 4781757958517120153}
   - component: {fileID: 6003018329647700079}
-  - component: {fileID: 3246152219071515794}
+  - component: {fileID: 2639972481989787166}
+  - component: {fileID: -1422255945681967407}
   m_Layer: 0
   m_Name: EyeOrangeLarge
   m_TagString: EyeOrangeLarge
@@ -115,14 +116,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8849241543384204202}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: -0.5, z: -0.49999997, w: 0.5}
-  m_LocalPosition: {x: 0.20843978, y: 1.0850775, z: 2.7416809}
-  m_LocalScale: {x: -12.34, y: -12.387993, z: -1.7282014}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: -1.6939, y: 0.1105, z: -1.8889}
+  m_LocalScale: {x: 5.67, y: 6.0664883, z: 0.84}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 538579884918933996}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!33 &7463779853452142000
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -277,7 +278,7 @@ MonoBehaviour:
   m_StartingInteractionStrengthFilters: []
   m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
-  m_UseDynamicAttach: 0
+  m_UseDynamicAttach: 1
   m_MatchAttachPosition: 1
   m_MatchAttachRotation: 1
   m_SnapToColliderVolume: 1
@@ -325,7 +326,28 @@ MonoBehaviour:
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
   m_FarAttachMode: 1
---- !u!64 &3246152219071515794
+--- !u!65 &2639972481989787166
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849241543384204202}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.0041175787, y: 0.019922195, z: 0.14336282}
+  m_Center: {x: 0.0017233717, y: 0.000041826173, z: 0}
+--- !u!64 &-1422255945681967407
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
