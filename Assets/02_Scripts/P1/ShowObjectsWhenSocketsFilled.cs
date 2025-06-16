@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
-using UnityEngine.VFX;
 
 public class ShowObjectsWhenSocketsFilled : MonoBehaviour
 {
@@ -21,7 +20,7 @@ public class ShowObjectsWhenSocketsFilled : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip showSound;
 
-    public VisualEffect particleEffect;
+    public ParticleSystem particleEffect;
 
     private bool alreadyShown = false;
     public bool AlreadyShown => alreadyShown;
@@ -51,22 +50,35 @@ public class ShowObjectsWhenSocketsFilled : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         foreach (var go in objectsToHide)
+        {
             if (go != null) go.SetActive(false);
+        }
 
         foreach (var go in objectsToShow)
+        {
             if (go != null) go.SetActive(true);
+        }
 
         if (objectToHideAfterDelay != null)
+        {
             objectToHideAfterDelay.SetActive(false);
+        }
 
         foreach (var go in objectsToShowAfterDelay)
+        {
             if (go != null) go.SetActive(true);
+        }
 
         if (audioSource != null && showSound != null)
+        {
             audioSource.PlayOneShot(showSound);
+        }
 
         if (particleEffect != null)
+        {
+            particleEffect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             particleEffect.Play();
+        }
     }
 
     public void StopAnimation()

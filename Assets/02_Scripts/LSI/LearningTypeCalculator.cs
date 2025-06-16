@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
@@ -19,7 +18,7 @@ public class LearningTypeCalculator : MonoBehaviour
 
     public AudioSource audioSource;
     public AudioClip showEffectSound;
-    public VisualEffect particleEffect;
+    public ParticleSystem particleEffect;
 
     public void AddScores(XRSocketInteractor[] sockets)
     {
@@ -108,8 +107,6 @@ public class LearningTypeCalculator : MonoBehaviour
                 break;
             case "Assimilating":
                 assimilatingObject.SetActive(true);
-                break;
-            default:
                 break;
         }
 

@@ -12,8 +12,8 @@ LightingSettings:
   m_EnableRealtimeLightmaps: 1
   m_RealtimeEnvironmentLighting: 1
   m_BounceScale: 1
-  m_AlbedoBoost: 3.64
-  m_IndirectOutputScale: 1.09
+  m_AlbedoBoost: 2.07
+  m_IndirectOutputScale: 0.95
   m_UsingShadowmask: 1
   m_BakeBackend: 2
   m_LightmapMaxSize: 2048
@@ -24,8 +24,8 @@ LightingSettings:
   m_LightmapCompression: 3
   m_AO: 1
   m_AOMaxDistance: 0.1
-  m_CompAOExponent: 0.83
-  m_CompAOExponentDirect: 0.9
+  m_CompAOExponent: 0.57
+  m_CompAOExponentDirect: 0.6
   m_ExtractAO: 0
   m_MixedBakeMode: 2
   m_LightmapsBakeMode: 1

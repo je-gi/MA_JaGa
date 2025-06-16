@@ -13,6 +13,9 @@ public class LayerChangeOnSocket : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip layerChangeAudio;
 
+    [Header("Partikeleffekt bei Layeränderung")]
+    [SerializeField] private ParticleSystem particleEffect;
+
     [Header("Callout Steuerung")]
     [SerializeField] private VisibilityCallout visibilityCallout;
 
@@ -56,6 +59,7 @@ public class LayerChangeOnSocket : MonoBehaviour
                 Debug.Log("Added interaction layer.");
 
                 PlayAudio();
+                PlayParticleEffect();
                 ShowPrefabCallout();
             }
             else
@@ -79,6 +83,15 @@ public class LayerChangeOnSocket : MonoBehaviour
 
             audioSource.clip = layerChangeAudio;
             audioSource.Play();
+        }
+    }
+
+    private void PlayParticleEffect()
+    {
+        if (particleEffect != null)
+        {
+            particleEffect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            particleEffect.Play();
         }
     }
 

@@ -5,24 +5,26 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class PrefabDuplicator : MonoBehaviour
 {
     [Header("Sockets & Prefabs")]
-    public XRSocketInteractor mainSocketInteractor;
-    public XRSocketInteractor variantSocketInteractor;
+    public XRSocketInteractor eyeSocket;
+    public XRSocketInteractor cardSocket;
     public Transform spawnPoint;
-    public GameObject defaultPrefab;
-    public GameObject variantPrefab1;
-    public GameObject variantPrefab2;
-    public GameObject variantPrefab3;
-    public GameObject variantPrefab4;
 
-    private GameObject selectedPrefab;
+    public GameObject greenEyePrefab;
+    public GameObject greenEyeAnimatedPrefab;
 
-    [Header("Optional: GlassesShow")]
-    public GlassesShow glassesShow;
+    [Header("Zusatzobjekt bei Karte im Socket")]
+    public GameObject objectToShowWhenCardPresent;
 
     [Header("Audio")]
-    public AudioSource audioSource;
+    public AudioSource sfxAudioSource;            
+    public AudioClip successSound;
+    public AudioClip errorSound;
+
+    public AudioSource firstSpawnAudioSource;    
     public AudioClip firstSpawnAudio;
-    private bool hasSpawnedOnce = false;
+
+    [Header("Partikeleffekt beim Spawn")]
+    public ParticleSystem spawnParticleEffect;
 
     [Header("Callouts")]
     public VisibilityCallout visibilityCallout;
@@ -31,75 +33,68 @@ public class PrefabDuplicator : MonoBehaviour
     [Header("Puzzle")]
     public P2Manager p2Manager;
 
-    private void Start()
-    {
-        selectedPrefab = defaultPrefab;
-    }
-
-    public void OnButtonPressed()
-    {
-        if (mainSocketInteractor.hasSelection)
-        {
-            if (variantSocketInteractor.hasSelection)
-            {
-                var selectedInteractable = variantSocketInteractor.GetOldestInteractableSelected();
-                if (selectedInteractable != null)
-                {
-                    GameObject variantObject = selectedInteractable.transform.gameObject;
-
-                    if (variantObject.CompareTag("Variant01"))
-                        selectedPrefab = variantPrefab1;
-                    else if (variantObject.CompareTag("Variant02"))
-                        selectedPrefab = variantPrefab2;
-                    else if (variantObject.CompareTag("Variant03"))
-                        selectedPrefab = variantPrefab3;
-                    else if (variantObject.CompareTag("Variant04"))
-                        selectedPrefab = variantPrefab4;
-                }
-            }
-            else
-            {
-                selectedPrefab = defaultPrefab;
-            }
-
-            GameObject spawnedObject = Instantiate(selectedPrefab, spawnPoint.position, spawnPoint.rotation);
-
-            if (!hasSpawnedOnce)
-            {
-                PlayAudio();
-                if (visibilityCallout != null)
-                {
-                    visibilityCallout.SetCalloutVisibility("AnimationCallout", true);
-                    animationCalloutShown = true;
-                }
-                hasSpawnedOnce = true;
-            }
-
-            if (glassesShow != null)
-            {
-                glassesShow.RegisterEyeObject(spawnedObject);
-            }
-        }
-    }
-
-    private void PlayAudio()
-    {
-        if (audioSource != null && firstSpawnAudio != null)
-        {
-            if (audioSource.isPlaying)
-                audioSource.Stop();
-
-            audioSource.clip = firstSpawnAudio;
-            audioSource.Play();
-        }
-    }
+    private bool hasSpawnedOnce = false;
 
     private void Update()
     {
+        if (objectToShowWhenCardPresent != null)
+        {
+            objectToShowWhenCardPresent.SetActive(cardSocket.hasSelection);
+        }
         if (animationCalloutShown && p2Manager != null && p2Manager.IsPuzzleCompleted)
         {
             visibilityCallout.SetCalloutVisibility("AnimationCallout", false);
             animationCalloutShown = false;
+        }
+    }
+
+    public void OnButtonPressed()
+    {
+        if (!eyeSocket.hasSelection)
+        {
+            PlaySound(sfxAudioSource, errorSound);
+            return;
+        }
+
+        GameObject prefabToSpawn = cardSocket.hasSelection ? greenEyeAnimatedPrefab : greenEyePrefab;
+        GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
+
+        PlaySound(sfxAudioSource, successSound);
+        PlaySpawnEffect();
+
+        if (!hasSpawnedOnce)
+        {
+            PlaySound(firstSpawnAudioSource, firstSpawnAudio);
+
+            if (visibilityCallout != null)
+            {
+                visibilityCallout.SetCalloutVisibility("AnimationCallout", true);
+                animationCalloutShown = true;
+            }
+
+            hasSpawnedOnce = true;
+        }
+
+        if (TryGetComponent<GlassesShow>(out var glassesShow))
+        {
+            glassesShow.RegisterEyeObject(spawnedObject);
+        }
+    }
+
+    private void PlaySound(AudioSource source, AudioClip clip)
+    {
+        if (source != null && clip != null)
+        {
+            source.PlayOneShot(clip);
+        }
+    }
+
+    private void PlaySpawnEffect()
+    {
+        if (spawnParticleEffect != null)
+        {
+            spawnParticleEffect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            spawnParticleEffect.Play();
         }
     }
 }
