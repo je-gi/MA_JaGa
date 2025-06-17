@@ -27,8 +27,16 @@ public class HandAssemblyManager : MonoBehaviour
     private Dictionary<string, string> objectTextDict = new Dictionary<string, string>();
 
     [Header("Audio Management")]
+    public AudioClip hand1CompleteAudio;
+    public AudioClip hand2CompleteAudio;
     public AudioClip hand2StartAudio;
     public AudioSource audioSource;
+    public AudioSource hand1AudioSource;
+    public AudioSource hand2AudioSource;
+
+    [Header("Particle Effects")]
+    public ParticleSystem hand1Particles;
+    public ParticleSystem hand2Particles;
 
     private int hand1Step = 0;
     private int hand2Step = 0;
@@ -85,7 +93,7 @@ public class HandAssemblyManager : MonoBehaviour
         }
         else if (hand1Step == 3 && hand1Sockets[3].hasSelection)
         {
-            FinalizeHand(hand1Sockets, hand1Parts, hand1Model);
+            FinalizeHand(hand1Sockets, hand1Parts, hand1Model, 1);
             hand1Done = true;
             spray1.ResetSpray();
             expand1.ResetShrink();
@@ -113,7 +121,7 @@ public class HandAssemblyManager : MonoBehaviour
         }
         else if (hand2Step == 3 && hand2Sockets[3].hasSelection)
         {
-            FinalizeHand(hand2Sockets, hand2Parts, hand2Model);
+            FinalizeHand(hand2Sockets, hand2Parts, hand2Model, 2);
             hand2Done = true;
         }
     }
@@ -124,7 +132,7 @@ public class HandAssemblyManager : MonoBehaviour
         if (index < parts.Count) parts[index].SetActive(true);
     }
 
-    private void FinalizeHand(List<XRSocketInteractor> sockets, List<GameObject> parts, GameObject model)
+    private void FinalizeHand(List<XRSocketInteractor> sockets, List<GameObject> parts, GameObject model, int handIndex)
     {
         foreach (var socket in sockets)
             socket.socketActive = false;
@@ -132,16 +140,24 @@ public class HandAssemblyManager : MonoBehaviour
         SetActiveList(parts, false);
 
         if (model != null)
-        {
             model.SetActive(true);
+
+        if (handIndex == 1)
+        {
+            if (hand1Particles != null) hand1Particles.Play();
+            if (hand1AudioSource != null && hand1CompleteAudio != null)
+                hand1AudioSource.PlayOneShot(hand1CompleteAudio);
+        }
+        else if (handIndex == 2)
+        {
+            if (hand2Particles != null) hand2Particles.Play();
+            if (hand2AudioSource != null && hand2CompleteAudio != null)
+                hand2AudioSource.PlayOneShot(hand2CompleteAudio);
         }
 
         TriggerObjectDisplayUI triggerTextManager = Object.FindFirstObjectByType<TriggerObjectDisplayUI>();
-
         if (triggerTextManager != null)
-        {
             triggerTextManager.ClearAllText();
-        }
     }
 
     private bool IsAnySocketOccupied()
