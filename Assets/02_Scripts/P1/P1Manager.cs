@@ -50,7 +50,6 @@ public class P1Manager : MonoBehaviour
     private bool revealAudioPlayed = false;
     private bool canPlayTriggerAudio = false;
 
-    private bool triggerClipFinished = false;
     private bool successClipFinished = false;
 
     void Start()
@@ -239,7 +238,6 @@ public class P1Manager : MonoBehaviour
 
     void OnTriggerClipFinished()
     {
-        triggerClipFinished = true;
         ShowCallout("AudioClipCallout");
         ShowCallout("AudioSourceCallout");
     }
