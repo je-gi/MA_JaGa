@@ -24,11 +24,32 @@ public class SnailGrab : MonoBehaviour
 
     public void WakeUp()
     {
-        if (!hasSpoken)
+        if (hasSpoken) return;
+        hasSpoken = true;
+
+        if (objectToDisable != null) objectToDisable.SetActive(false);
+        if (objectToEnable != null) objectToEnable.SetActive(true);
+
+    
+        Invoke(nameof(PlayWakeUpAudio), 1f);
+
+    
+        if (wakeUpSpeech != null)
+        {
+            float totalDelay = 1f + wakeUpSpeech.length;
+            Invoke(nameof(EnableSnailGrab), totalDelay);
+        }
+        else
+        {
+            EnableSnailGrab(); 
+        }
+    }
+
+    private void PlayWakeUpAudio()
+    {
+        if (audioSource != null && wakeUpSpeech != null)
         {
             audioSource.PlayOneShot(wakeUpSpeech);
-            hasSpoken = true;
-            Invoke(nameof(EnableSnailGrab), wakeUpSpeech.length);
         }
     }
 
@@ -36,8 +57,5 @@ public class SnailGrab : MonoBehaviour
     {
         snailGrabInteractable.enabled = true;
         snailRigidbody.isKinematic = false;
-
-        if (objectToDisable != null) objectToDisable.SetActive(false);
-        if (objectToEnable != null) objectToEnable.SetActive(true);
     }
 }
