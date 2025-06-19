@@ -18101,9 +18101,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1367946958}
-  startAudioClip: {fileID: 8300000, guid: 241877cbe61b1d147a78f2fd264f9dca, type: 3}
-  completionAudioClip: {fileID: 8300000, guid: 178abc84151c81a4da33a0315ab14102, type: 3}
-  triggerAreaAudioClip: {fileID: 8300000, guid: bb04170d5d4d6404dad805531ad60940, type: 3}
+  startAudioClip: {fileID: 8300000, guid: e4aa01c4c9243be4eba33904cac241c0, type: 3}
+  completionAudioClip: {fileID: 8300000, guid: af2ec444e514bdb4099e976049172e14, type: 3}
+  triggerAreaAudioClip: {fileID: 8300000, guid: db0642627a1af394f810082cc9f742c9, type: 3}
   triggerZone: {fileID: 463113686}
   vrCameraTransform: {fileID: 467173759}
   disableGrabAndMakeKinematicOnSocket: {fileID: 292001282}
@@ -29387,7 +29387,7 @@ MonoBehaviour:
   snailSocket: {fileID: 951475108}
   snailGrabInteractable: {fileID: 9033483667995046096}
   audioSource: {fileID: 9033483667995046095}
-  snailSpeech: {fileID: 8300000, guid: 40c825e0951c06f45b96b735c5ffb29a, type: 3}
+  snailSpeech: {fileID: 8300000, guid: d0b6913d394b12e4688438138a33f6aa, type: 3}
   middleSymbol: {fileID: 1271420950}
   stationPanels:
   - {fileID: 1982457180}
@@ -37174,7 +37174,7 @@ MonoBehaviour:
   bootsObject: {fileID: 1916306800}
   objectToHide: {fileID: 1004519699867475655}
   snailAudioSource: {fileID: 9033483667995046095}
-  snailClip: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+  snailClip: {fileID: 8300000, guid: 8e699e7148381294eba9542263645a2d, type: 3}
 --- !u!1 &525451456
 GameObject:
   m_ObjectHideFlags: 0
@@ -61224,9 +61224,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   introManager: {fileID: 1273977048}
   audioSource: {fileID: 1367946958}
-  lsiAudioClip: {fileID: 8300000, guid: f2ef468bc95c1e44fbaf048800e078c2, type: 3}
-  postSocketAudioClip: {fileID: 8300000, guid: 761389bce58ded04fb5e1a427e32a4b5, type: 3}
-  finalPuzzleCompletedAudioClip: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+  lsiAudioClip: {fileID: 8300000, guid: bbbc8b32f5322a245a2036085a4cd59f, type: 3}
+  postSocketAudioClip: {fileID: 8300000, guid: 998cf8e141719394c800f5e9e0d67817, type: 3}
+  finalPuzzleCompletedAudioClip: {fileID: 8300000, guid: 598a1dd9e9ceb964d8aaf34bdda446f5, type: 3}
   lsiObjects:
   - {fileID: 85966273}
   - {fileID: 7989015952899427542}
@@ -77549,6 +77549,171 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1092698603}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!43 &1094103575
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RopeMesh
+  serializedVersion: 11
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 252
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 65
+    localAABB:
+      m_Center: {x: 0.6363032, y: 0.48950016, z: 0.33264363}
+      m_Extent: {x: 0.39748988, y: 0.032483697, z: 0.065514565}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexFormat: 0
+  m_IndexBuffer: 00000100070001000800070001000200080002000900080002000300090003000a000900030004000a0004000b000a00040005000b0005000c000b00050006000c0006000d000c00070008000e0008000f000e00080009000f00090010000f0009000a0010000a00110010000a000b0011000b00120011000b000c0012000c00130012000c000d0013000d00140013000e000f0015000f00160015000f001000160010001700160010001100170011001800170011001200180012001900180012001300190013001a001900130014001a0014001b001a00150016001c0016001d001c00160017001d0017001e001d00170018001e0018001f001e00180019001f00190020001f0019001a0020001a00210020001a001b0021001b00220021001c001d0023001d00240023001d001e0024001e00250024001e001f0025001f00260025001f0020002600200027002600200021002700210028002700210022002800220029002800230024002a0024002b002a00240025002b0025002c002b00250026002c0026002d002c00260027002d0027002e002d00270028002e0028002f002e00280029002f00290030002f0031003200330031003300340031003400350031003500360031003600370031003700380039003a003b0039003b003c0039003c003d0039003d003e0039003e003f0039003f004000
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 65
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 24
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 2080
+    _typelessdata: 780a843f2484003f94edbc3ea998c3bd91755fbfb0fbf43e0000000000000000f1ae833fe8c1013fe42bc13eaf3d3abe5a6a2abf5546393fabaa2a3e00000000499c833f3450043fe42bc13ea0bc95be25539f3eca7b673fabaaaa3e0000000026e5833fbca0053f94edbc3e7a94e2bd16307a3f0009393e0000003f00000000ad40843ff862043f44afb83eea453a3efc422a3ffd6939bfabaa2a3f000000005553843facd4013f44afb83e409b953e0a559fbedb8067bf5555553f00000000780a843f2484003f94edbc3e87f2463eca1e5bbf5858f5be0000803f0000000082eb4e3f1983fa3ecc369a3e0d79b4bd854b5fbfd74df63e00000000b24f6f3e4a644e3f1904fd3ea48d9e3e8d705ebe1d3ae4be4f4f5e3fabaa2a3eb24f6f3ef83e4e3f5810013fa48d9e3e20357dbe5ffc0c3f80164c3fabaaaa3eb24f6f3edea04e3f245e023fcc369a3e5e1af5bca33a7f3f778692bd0000003fb24f6f3e16284f3fa41d013ff4df953efbc85d3e6826e43ed45e5ebfabaa2a3fb24f6f3e684d4f3fb11efd3ef4df953e247a7c3efe870cbf29754cbf5555553fb24f6f3e82eb4e3f1983fa3ecc369a3e89d9323e86505bbfb77ff8be0000803fb24f6f3ed635353f5194f73e6c638f3e5b3010bde3775ebfc7affc3e00000000b048ac3eb400353fb11efa3e6cd0933eabdde2bd8813f3be9c845f3fabaa2a3eb048ac3e64db343f493bff3e6cd0933ee5bf18be7d16063f70b4563fabaaaa3eb048ac3e36eb343fc0e6003f6c638f3ee0d31bbdada57f3f961714bd0000003fb048ac3e5820353f2143ff3e6cf68a3ec70adf3d0038f23e89cf5fbfabaa2a3fb048ac3ea845353f8926fa3e6cf68a3ed703163ee23605bf395e57bf5555553fb048ac3ed635353f5194f73e6c638f3e3730e13d331c5cbf1c4effbe0000803fb048ac3efa16233f3183f53ef42c8d3e2424443d66455dbfcc28003f00000000bba6d03e9044233fd118f83ec494913e68652c3df15fffbef49e5d3fabaa2a3ebba6d03e3e1f233f6935fd3ec494913e6a9ed63a2961003f897b5d3fabaaaa3ebba6d03e5acc223f61bcff3ef42c8d3ebdab25bdecc97f3fa68473bb0000003fbba6d03ec49e223fc126fd3e24c5883ebc7a33bd828afd3eef1f5ebfabaa2a3fbba6d03e16c4223f290af83e24c5883efa218bbb7b5fffbe6ce15dbf5555553fbba6d03efa16233f3183f53ef42c8d3e8adaab3c2f795dbf9f4800bf0000803fbba6d03e1ef8103f1172f33e4c51913e0a1d0b3ee90d5cbff035fc3e00000000d72ff53ec275113fd110f63efc9a953e2139433ee98805bf05e4543fabaa2a3ed72ff53e7050113f692dfb3efc9a953ec38e1d3ea5f0f43eac535d3fabaaaa3ed72ff53e7aad103f41abfd3e4c51913eba5b18bd12b47f3f811bfa3c0000003fd72ff53ed62f103f810cfb3e9c078d3e1edc43be8dc7043f7c5355bfabaa2a3fd72ff53e2855103fe9eff53e9c078d3e1c481ebe1586f4bedb685dbf5555553fd72ff53e1ef8103f1172f33e4c51913e6dfe76bdeed45ebf4326fabe0000803fd72ff53ef084ee3e4983f03e64e19e3e71dd4a3e582c5bbf195af43e000000000639153ffcdbef3e4927f33eac0ea33ed422923e07780cbf1929493fabaa2a3e0639153f5891ef3ee143f83eac0ea33efe65843ef0dee53ec8f55a3fabaaaa3e0639153fa8efed3e79bcfa3e64e19e3eaaa2ddbcd14c7f3f61d58c3d0000003f0639153f9c98ec3e7918f83e1cb49a3e552f92be83390c3f6e5249bfabaa2a3f0639153f40e3ec3ee1fbf23e1cb49a3e645a84be90f7e5be11f15abf5555553f0639153ff084ee3e4983f03e64e19e3e9e75e3bde2ad5fbf9172f2be0000803f0639153f1c64783e10fee93e1caec73edf0f5e3e6ae55abfc426f13e00000000d000523f34127b3e10a2ec3e64dbcb3effa7ab3ef0129ebe92dd633fabaa2a3ed000523ff07c7a3ea8bef13e64dbcb3e1a355d3eed042b3f954a363fabaaaa3ed000523f9439773e4037f43e1caec73ef935f4bdde0d7a3f734c36be0000003fd000523f7c8b743e4093f13ed480c33e04a8abbeea129e3e92dd63bfabaa2a3fd000523fc020753ea876ec3ed480c33e18355dbeee042bbf944a36bf5555553fd000523f1c64783e10fee93e1caec73e3421f2bd4bca5fbf7a25f1be0000803fd000523fcff7833f7012033f94edbc3eb19774bf66345fbdac8994be0000003f00000000780a843f2484003f94edbc3e8d9774bf43385fbd808a94be0000803f0000003ff1ae833fe8c1013fe42bc13ea39774bf5b325fbd178a94be0000403fecd96e3f499c833f3450043fe42bc13ec49774bf79325fbd438994befeff7f3eecd96e3f26e5833fbca0053f94edbc3eae9774bf61385fbdad8994be00000000ffffff3ead40843ff862043f44afb83ea39774bf5b325fbd178a94be0200803ea030893d5553843facd4013f44afb83ec49774bf79325fbd438994beffff3f3fa030893d780a843f2484003f94edbc3ece9774bf7f385fbdda8894be0000803f0100003fd8ce773ea81aef3e1caec73e5bc270bfeab25bbdabd7ab3e0000003fd000523f1c64783e10fee93e1caec73e5cc270bfebb25bbdacd7ab3e0000803f0000003f34127b3e10a2ec3e64dbcb3e5cc270bfebb25bbdacd7ab3e0000403fecd96e3ff07c7a3ea8bef13e64dbcb3e5cc270bfebb25bbdadd7ab3efeff7f3eecd96e3f9439773e4037f43e1caec73e5cc270bfebb25bbdacd7ab3e00000000ffffff3e7c8b743e4093f13ed480c33e5cc270bfebb25bbdacd7ab3e0200803ea030893dc020753ea876ec3ed480c33e5cc270bfebb25bbdadd7ab3effff3f3fa030893d1c64783e10fee93e1caec73e5cc270bfebb25bbdadd7ab3e0000803f0100003f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0.6363032, y: 0.48950016, z: 0.33264363}
+    m_Extent: {x: 0.39748988, y: 0.032483697, z: 0.065514565}
+  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!1 &1094209802
 GameObject:
   m_ObjectHideFlags: 0
@@ -90898,7 +91063,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeScreen: {fileID: 1647784704}
   audioSource: {fileID: 1367946958}
-  introAudioClip: {fileID: 8300000, guid: 0d841c46febcb24438e2bec9c77890c2, type: 3}
+  introAudioClip: {fileID: 8300000, guid: e1d76c690ea796544abdd32ade799966, type: 3}
   objectsToActivateAfterIntro:
   - {fileID: 467173761}
   - {fileID: 467173760}
@@ -100174,171 +100339,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1410362896}
   m_CullTransparentMesh: 1
---- !u!43 &1411553469
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: RopeMesh
-  serializedVersion: 11
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 252
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 65
-    localAABB:
-      m_Center: {x: 0.6363032, y: 0.48950016, z: 0.33264363}
-      m_Extent: {x: 0.39748988, y: 0.032483697, z: 0.065514565}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_BonesAABB: []
-  m_VariableBoneCountWeights:
-    m_Data: 
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 00000100070001000800070001000200080002000900080002000300090003000a000900030004000a0004000b000a00040005000b0005000c000b00050006000c0006000d000c00070008000e0008000f000e00080009000f00090010000f0009000a0010000a00110010000a000b0011000b00120011000b000c0012000c00130012000c000d0013000d00140013000e000f0015000f00160015000f001000160010001700160010001100170011001800170011001200180012001900180012001300190013001a001900130014001a0014001b001a00150016001c0016001d001c00160017001d0017001e001d00170018001e0018001f001e00180019001f00190020001f0019001a0020001a00210020001a001b0021001b00220021001c001d0023001d00240023001d001e0024001e00250024001e001f0025001f00260025001f0020002600200027002600200021002700210028002700210022002800220029002800230024002a0024002b002a00240025002b0025002c002b00250026002c0026002d002c00260027002d0027002e002d00270028002e0028002f002e00280029002f00290030002f0031003200330031003300340031003400350031003500360031003600370031003700380039003a003b0039003b003c0039003c003d0039003d003e0039003e003f0039003f004000
-  m_VertexData:
-    serializedVersion: 3
-    m_VertexCount: 65
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 24
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 2080
-    _typelessdata: 780a843f2484003f94edbc3ea998c3bd91755fbfb0fbf43e0000000000000000f1ae833fe8c1013fe42bc13eaf3d3abe5a6a2abf5546393fabaa2a3e00000000499c833f3450043fe42bc13ea0bc95be25539f3eca7b673fabaaaa3e0000000026e5833fbca0053f94edbc3e7a94e2bd16307a3f0009393e0000003f00000000ad40843ff862043f44afb83eea453a3efc422a3ffd6939bfabaa2a3f000000005553843facd4013f44afb83e409b953e0a559fbedb8067bf5555553f00000000780a843f2484003f94edbc3e87f2463eca1e5bbf5858f5be0000803f0000000082eb4e3f1983fa3ecc369a3e0d79b4bd854b5fbfd74df63e00000000b24f6f3e4a644e3f1904fd3ea48d9e3e8d705ebe1d3ae4be4f4f5e3fabaa2a3eb24f6f3ef83e4e3f5810013fa48d9e3e20357dbe5ffc0c3f80164c3fabaaaa3eb24f6f3edea04e3f245e023fcc369a3e5e1af5bca33a7f3f778692bd0000003fb24f6f3e16284f3fa41d013ff4df953efbc85d3e6826e43ed45e5ebfabaa2a3fb24f6f3e684d4f3fb11efd3ef4df953e247a7c3efe870cbf29754cbf5555553fb24f6f3e82eb4e3f1983fa3ecc369a3e89d9323e86505bbfb77ff8be0000803fb24f6f3ed635353f5194f73e6c638f3e5b3010bde3775ebfc7affc3e00000000b048ac3eb400353fb11efa3e6cd0933eabdde2bd8813f3be9c845f3fabaa2a3eb048ac3e64db343f493bff3e6cd0933ee5bf18be7d16063f70b4563fabaaaa3eb048ac3e36eb343fc0e6003f6c638f3ee0d31bbdada57f3f961714bd0000003fb048ac3e5820353f2143ff3e6cf68a3ec70adf3d0038f23e89cf5fbfabaa2a3fb048ac3ea845353f8926fa3e6cf68a3ed703163ee23605bf395e57bf5555553fb048ac3ed635353f5194f73e6c638f3e3730e13d331c5cbf1c4effbe0000803fb048ac3efa16233f3183f53ef42c8d3e2424443d66455dbfcc28003f00000000bba6d03e9044233fd118f83ec494913e68652c3df15fffbef49e5d3fabaa2a3ebba6d03e3e1f233f6935fd3ec494913e6a9ed63a2961003f897b5d3fabaaaa3ebba6d03e5acc223f61bcff3ef42c8d3ebdab25bdecc97f3fa68473bb0000003fbba6d03ec49e223fc126fd3e24c5883ebc7a33bd828afd3eef1f5ebfabaa2a3fbba6d03e16c4223f290af83e24c5883efa218bbb7b5fffbe6ce15dbf5555553fbba6d03efa16233f3183f53ef42c8d3e8adaab3c2f795dbf9f4800bf0000803fbba6d03e1ef8103f1172f33e4c51913e0a1d0b3ee90d5cbff035fc3e00000000d72ff53ec275113fd110f63efc9a953e2139433ee98805bf05e4543fabaa2a3ed72ff53e7050113f692dfb3efc9a953ec38e1d3ea5f0f43eac535d3fabaaaa3ed72ff53e7aad103f41abfd3e4c51913eba5b18bd12b47f3f811bfa3c0000003fd72ff53ed62f103f810cfb3e9c078d3e1edc43be8dc7043f7c5355bfabaa2a3fd72ff53e2855103fe9eff53e9c078d3e1c481ebe1586f4bedb685dbf5555553fd72ff53e1ef8103f1172f33e4c51913e6dfe76bdeed45ebf4326fabe0000803fd72ff53ef084ee3e4983f03e64e19e3e71dd4a3e582c5bbf195af43e000000000639153ffcdbef3e4927f33eac0ea33ed422923e07780cbf1929493fabaa2a3e0639153f5891ef3ee143f83eac0ea33efe65843ef0dee53ec8f55a3fabaaaa3e0639153fa8efed3e79bcfa3e64e19e3eaaa2ddbcd14c7f3f61d58c3d0000003f0639153f9c98ec3e7918f83e1cb49a3e552f92be83390c3f6e5249bfabaa2a3f0639153f40e3ec3ee1fbf23e1cb49a3e645a84be90f7e5be11f15abf5555553f0639153ff084ee3e4983f03e64e19e3e9e75e3bde2ad5fbf9172f2be0000803f0639153f1c64783e10fee93e1caec73edf0f5e3e6ae55abfc426f13e00000000d000523f34127b3e10a2ec3e64dbcb3effa7ab3ef0129ebe92dd633fabaa2a3ed000523ff07c7a3ea8bef13e64dbcb3e1a355d3eed042b3f954a363fabaaaa3ed000523f9439773e4037f43e1caec73ef935f4bdde0d7a3f734c36be0000003fd000523f7c8b743e4093f13ed480c33e04a8abbeea129e3e92dd63bfabaa2a3fd000523fc020753ea876ec3ed480c33e18355dbeee042bbf944a36bf5555553fd000523f1c64783e10fee93e1caec73e3421f2bd4bca5fbf7a25f1be0000803fd000523fcff7833f7012033f94edbc3eb19774bf66345fbdac8994be0000003f00000000780a843f2484003f94edbc3e8d9774bf43385fbd808a94be0000803f0000003ff1ae833fe8c1013fe42bc13ea39774bf5b325fbd178a94be0000403fecd96e3f499c833f3450043fe42bc13ec49774bf79325fbd438994befeff7f3eecd96e3f26e5833fbca0053f94edbc3eae9774bf61385fbdad8994be00000000ffffff3ead40843ff862043f44afb83ea39774bf5b325fbd178a94be0200803ea030893d5553843facd4013f44afb83ec49774bf79325fbd438994beffff3f3fa030893d780a843f2484003f94edbc3ece9774bf7f385fbdda8894be0000803f0100003fd8ce773ea81aef3e1caec73e5bc270bfeab25bbdabd7ab3e0000003fd000523f1c64783e10fee93e1caec73e5cc270bfebb25bbdacd7ab3e0000803f0000003f34127b3e10a2ec3e64dbcb3e5cc270bfebb25bbdacd7ab3e0000403fecd96e3ff07c7a3ea8bef13e64dbcb3e5cc270bfebb25bbdadd7ab3efeff7f3eecd96e3f9439773e4037f43e1caec73e5cc270bfebb25bbdacd7ab3e00000000ffffff3e7c8b743e4093f13ed480c33e5cc270bfebb25bbdacd7ab3e0200803ea030893dc020753ea876ec3ed480c33e5cc270bfebb25bbdadd7ab3effff3f3fa030893d1c64783e10fee93e1caec73e5cc270bfebb25bbdadd7ab3e0000803f0100003f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0.6363032, y: 0.48950016, z: 0.33264363}
-    m_Extent: {x: 0.39748988, y: 0.032483697, z: 0.065514565}
-  m_MeshUsageFlags: 0
-  m_CookingOptions: 30
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  'm_MeshMetrics[0]': 1
-  'm_MeshMetrics[1]': 1
-  m_MeshOptimizationFlags: 1
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!1 &1411700604 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c6984c48aed9a154294088f4265d8478, type: 3}
@@ -109115,13 +109115,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1367946958}
-  clipIntro: {fileID: 8300000, guid: fb854474c4e5ed1409851ad5225003e7, type: 3}
-  clipOnTriggerEntered: {fileID: 8300000, guid: fcdc2d6ee7fb8ff46a8b61f7a73597e9, type: 3}
-  clipOnSuccess: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  clipOnFailure: {fileID: 8300000, guid: 16fba6d30ed741d4a9fdd6e79ee2f3ac, type: 3}
-  clipOnPuzzleCompleted: {fileID: 8300000, guid: bae85af4aa6e946428d88abbf5fb8696, type: 3}
-  clipOnObjectGrabbed: {fileID: 8300000, guid: 220b799552fa831448706ac69d572610, type: 3}
-  clipOnRevealObjects: {fileID: 8300000, guid: 0d841c46febcb24438e2bec9c77890c2, type: 3}
+  clipIntro: {fileID: 8300000, guid: e4fba235e9bdbe3469b94f4ed8cb0af8, type: 3}
+  clipOnTriggerEntered: {fileID: 8300000, guid: 82cda461f27cf0a4996d8c59351accbe, type: 3}
+  clipOnSuccess: {fileID: 8300000, guid: da895797f391b7a4b8cb32e68d5687cf, type: 3}
+  clipOnFailure: {fileID: 8300000, guid: 3659d032380b2684591516954e8d809b, type: 3}
+  clipOnPuzzleCompleted: {fileID: 8300000, guid: 902c932325a071c41b6717f38d4ba589, type: 3}
+  clipOnObjectGrabbed: {fileID: 8300000, guid: 71a27b62e4375674baf3d576420ce410, type: 3}
+  clipOnRevealObjects: {fileID: 8300000, guid: 743bd3706e4bb674db49fbb96472d148, type: 3}
   triggerZone: {fileID: 1030272188}
   vrCameraTransform: {fileID: 467173759}
   socketChecker: {fileID: 2132513219}
@@ -117692,9 +117692,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1367946958}
-  startAudioClip: {fileID: 8300000, guid: abf3a110b25dac24fb85917a78677fe7, type: 3}
-  completionAudioClip: {fileID: 8300000, guid: faf57f9694119f84da15085723dd81d4, type: 3}
-  triggerAreaAudioClip: {fileID: 8300000, guid: 995d4602640a3bb46b7c4e1660c651de, type: 3}
+  startAudioClip: {fileID: 8300000, guid: ddd6fe53a188ed84c91bea3469775810, type: 3}
+  completionAudioClip: {fileID: 8300000, guid: 35bc83ac519bae849a73b15d91f437ba, type: 3}
+  triggerAreaAudioClip1: {fileID: 8300000, guid: aa6eb2f58c2c2d745889615363f5e5be, type: 3}
+  triggerAreaAudioClip2: {fileID: 8300000, guid: 0f09baa5a5b429f43a39691d45912e3f, type: 3}
   triggerZone: {fileID: 1926596682}
   vrCameraTransform: {fileID: 467173759}
   disableGrabAndMakeKinematicOnSocket: {fileID: 1628896252}
@@ -117734,25 +117735,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1367946958}
-  h1p1: {fileID: 1462985893}
-  h1p2: {fileID: 584561242}
-  h1p3: {fileID: 1125356314}
-  h1p4: {fileID: 1715535022}
   h1s1: {fileID: 1867400574}
   h1s2: {fileID: 798882025}
   h1s3: {fileID: 1149062884}
-  h1s4: {fileID: 1598863642}
-  h1p1GrabAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  h1s1FilledAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  h1p2GrabAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  h1s2FilledAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  h1p3GrabAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  materialChangeAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  h1s3FilledAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  h1p4GrabAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  shrinkAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  h1s4FilledAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  visibilityCallout: {fileID: 306036615}
+  h2s1: {fileID: 1791509391}
+  h2s2: {fileID: 99569757}
+  h2s3: {fileID: 1165928681}
+  h1s1FilledAudio: {fileID: 8300000, guid: ec624969dbf90b546877999a79b1f709, type: 3}
+  h1s2FilledAudio: {fileID: 8300000, guid: 8ff57518a06b16c43858db1698aa87c3, type: 3}
+  h1s3FilledAudio: {fileID: 8300000, guid: e9c50de93d284e749a1ec1320ab3ec2d, type: 3}
+  h1SpawnAudio1: {fileID: 8300000, guid: 433bf2cb90d9e2843bb2da206fd1c309, type: 3}
+  h1SpawnAudio2: {fileID: 8300000, guid: 72e248ca59d90204f9efaa12697c5b35, type: 3}
+  h2s1FilledAudio: {fileID: 8300000, guid: 574c61b96101b98409be662db798353d, type: 3}
+  h2s2FilledAudio: {fileID: 8300000, guid: 80a3db3fa31fd4648adaf6c10cce9b1a, type: 3}
+  h2s3FilledAudio: {fileID: 8300000, guid: 8f895937b398da449b638d73bf211d4b, type: 3}
+  h2SpawnAudio: {fileID: 8300000, guid: adc672fb9671b6a4f94105b53e7712ee, type: 3}
 --- !u!1 &1629579147
 GameObject:
   m_ObjectHideFlags: 0
@@ -124616,7 +124613,7 @@ MonoBehaviour:
   successSound: {fileID: 8300000, guid: 16fba6d30ed741d4a9fdd6e79ee2f3ac, type: 3}
   errorSound: {fileID: 8300000, guid: 1e66e7fe45486ff48a1bc4f7bdf94e24, type: 3}
   firstSpawnAudioSource: {fileID: 1367946958}
-  firstSpawnAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+  firstSpawnAudio: {fileID: 8300000, guid: 35480a6be2a42d543a79af11df97f6e5, type: 3}
   spawnParticleEffect: {fileID: 280238131}
   visibilityCallout: {fileID: 306036615}
   p2Manager: {fileID: 2131771737}
@@ -140923,7 +140920,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1913324126}
-  m_Mesh: {fileID: 1411553469}
+  m_Mesh: {fileID: 1094103575}
 --- !u!114 &1913324133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144620,14 +144617,31 @@ MonoBehaviour:
   - {fileID: 267769956}
   - {fileID: 765223447}
   - {fileID: 2118296064}
-  miniGameStartSounds:
-  - {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  - {fileID: 8300000, guid: 40c825e0951c06f45b96b735c5ffb29a, type: 3}
-  - {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
-  - {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
   audioSource: {fileID: 9033483667995046095}
-  errorAudioClip: {fileID: 8300000, guid: 16fba6d30ed741d4a9fdd6e79ee2f3ac, type: 3}
-  successAudioClip: {fileID: 8300000, guid: d14b106713a74b448bcab90869f1706e, type: 3}
+  miniGameIntroClips:
+  - {fileID: 8300000, guid: 10a8bb02fe3a08e45b2ad01c086b91ff, type: 3}
+  - {fileID: 8300000, guid: b9b99729ef30bc240afe6d13e82158ea, type: 3}
+  - {fileID: 8300000, guid: b05ecef57c7e0ad448c9c2a9f59f03b0, type: 3}
+  - {fileID: 8300000, guid: e46deb056181adb4fb818f6eb4a598d5, type: 3}
+  miniGameButtonClickClips:
+  - {fileID: 8300000, guid: 4d3e16fb79a8f544a95baef671bc6d4c, type: 3}
+  - {fileID: 8300000, guid: 4d3e16fb79a8f544a95baef671bc6d4c, type: 3}
+  - {fileID: 8300000, guid: 4d3e16fb79a8f544a95baef671bc6d4c, type: 3}
+  - {fileID: 8300000, guid: 4d3e16fb79a8f544a95baef671bc6d4c, type: 3}
+  miniGameErrorClips:
+  - {fileID: 8300000, guid: ebb7f484d74ae4d4686e80305bdfe922, type: 3}
+  - {fileID: 8300000, guid: 9278742f489ddcd4ea96b0a12362292c, type: 3}
+  - {fileID: 8300000, guid: cd3cbbd8d83190c4c96bd2729db3c00a, type: 3}
+  - {fileID: 8300000, guid: d1eb3fb94dbecc5409cd0bf034cc0e0d, type: 3}
+  miniGameSuccessClip1:
+  - {fileID: 8300000, guid: bbc5ad25001d4bd46b2a61863b5a3d98, type: 3}
+  - {fileID: 8300000, guid: 8650f17cac45baa4cae0ccf80b4c1f99, type: 3}
+  - {fileID: 8300000, guid: bf1b3afe2a24408459eeca2c93b50b61, type: 3}
+  miniGameSuccessClip2:
+  - {fileID: 8300000, guid: 4b75617ceb3de9a44aa4585ba01e6619, type: 3}
+  - {fileID: 8300000, guid: 45e283800cbb9f54eadcaeb9e10c76ee, type: 3}
+  - {fileID: 8300000, guid: 776799c150519094a99b884d7f4be13f, type: 3}
+  miniGame4SuccessClip: {fileID: 8300000, guid: 72afe30f1af17224fad67aabc4659a3e, type: 3}
   miniGame1AdditionalObjects:
   - {fileID: 8190326522981728509}
   - {fileID: 6870610879423038960}
@@ -156049,9 +156063,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1367946958}
-  startAudioClip: {fileID: 8300000, guid: 7e58743a48f3ec342a65b96dc2ddd753, type: 3}
-  completionAudioClip: {fileID: 8300000, guid: d4576e7cde6d39e41b4bf1cb697ee73d, type: 3}
-  triggerAreaAudioClip: {fileID: 8300000, guid: c6cd29c5df614b84693fc2665181f4c2, type: 3}
+  startAudioClip: {fileID: 8300000, guid: 9757524dfd1fc584db6006b9b7b3df27, type: 3}
+  completionAudioClip: {fileID: 8300000, guid: 53656c741ff553541941bec959ea6ae5, type: 3}
+  triggerAreaAudioClip: {fileID: 8300000, guid: 4bc402b3ff44b6e4b9ffa316c1145ec1, type: 3}
   triggerZone: {fileID: 930377480}
   vrCameraTransform: {fileID: 467173759}
   disableGrabAndMakeKinematicOnSocket: {fileID: 2131771738}
@@ -156119,26 +156133,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1367946958}
   singleGrabObject: {fileID: 1493296775830573238}
-  singleGrabAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+  singleGrabAudio: {fileID: 8300000, guid: cd32f2d6be28e3741bffa2a9aad8d544, type: 3}
   documentObjects:
   - {fileID: 19682296}
   - {fileID: 1753694163}
   - {fileID: 1551705498}
   - {fileID: 1799166918}
   - {fileID: 717384255}
-  firstDocumentGrabAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+  firstDocumentGrabAudio: {fileID: 8300000, guid: 1e50af04c5e1d8a4899de7447ef945ec, type: 3}
   triggerNotifier: {fileID: 661399884}
-  firstTriggerAudio: {fileID: 8300000, guid: 40c825e0951c06f45b96b735c5ffb29a, type: 3}
-  secondTriggerAudio: {fileID: 8300000, guid: 40c825e0951c06f45b96b735c5ffb29a, type: 3}
+  firstTriggerAudio: {fileID: 8300000, guid: 7d0e692238bbb5b4baeacdf5acae71c5, type: 3}
+  secondTriggerAudio: {fileID: 8300000, guid: 32ab5b88387dfc34a9b73fc62b8b3989, type: 3}
   socketAudioPairs:
   - socket: {fileID: 788024666}
-    audioClip: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+    audioClip: {fileID: 8300000, guid: f5099c73ac3aac246b3c9c3905e8d479, type: 3}
     hasPlayed: 0
   - socket: {fileID: 473914303}
-    audioClip: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+    audioClip: {fileID: 8300000, guid: 68b56da14cae75d4ab67545d4092193d, type: 3}
     hasPlayed: 0
   - socket: {fileID: 109508123}
-    audioClip: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+    audioClip: {fileID: 8300000, guid: d8c7e37c2705f5348a3f77d95e5bed9e, type: 3}
     hasPlayed: 0
   visibilityCallout: {fileID: 306036615}
   glassesSocket: {fileID: 1874033493}
@@ -237524,7 +237538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1367946958}
-  grabAudio: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+  grabAudio: {fileID: 8300000, guid: aa3129cd559f24d41b27a4bb13caa70a, type: 3}
   snail: {fileID: 9033483667995046098}
   minMoveDistance: 0.1
   requiredDustings: 3
@@ -396406,7 +396420,7 @@ AudioSource:
   m_GameObject: {fileID: 4875507895506126137}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5949025065362094982, guid: 3783b2c98b3ebc54aa43acb3a957d7be, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -396656,7 +396670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 9033483667995046095}
-  wakeUpSpeech: {fileID: 8300000, guid: f85e6cfc0e7ee95479a38538b7a2bcae, type: 3}
+  wakeUpSpeech: {fileID: 8300000, guid: bc16288be6ebb594e99f11645beac30e, type: 3}
   snailGrabInteractable: {fileID: 9033483667995046096}
   snailRigidbody: {fileID: 9033483667995046097}
   objectToDisable: {fileID: 1494416215}

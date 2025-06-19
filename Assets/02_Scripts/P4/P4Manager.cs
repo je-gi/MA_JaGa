@@ -8,7 +8,8 @@ public class P4Manager : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip startAudioClip;
     public AudioClip completionAudioClip;
-    public AudioClip triggerAreaAudioClip;
+    public AudioClip triggerAreaAudioClip1;
+    public AudioClip triggerAreaAudioClip2;
 
     [Header("Trigger Zone")]
     public Collider triggerZone;
@@ -61,7 +62,7 @@ public class P4Manager : MonoBehaviour
 
         if (!hasTriggeredAudioPlayed && hasStarted && startAudioFinished && triggerZone != null && IsCameraInTrigger())
         {
-            PlayTriggerAreaAudio();
+            StartCoroutine(PlayTriggerAreaAudioSequence());
             hasTriggeredAudioPlayed = true;
 
             if (visibilityCallout != null)
@@ -145,13 +146,22 @@ public class P4Manager : MonoBehaviour
         return false;
     }
 
-    private void PlayTriggerAreaAudio()
+    private IEnumerator PlayTriggerAreaAudioSequence()
     {
-        if (triggerAreaAudioClip != null && audioSource != null)
+        if (audioSource == null) yield break;
+
+        if (triggerAreaAudioClip1 != null)
         {
-            audioSource.Stop();
-            audioSource.clip = triggerAreaAudioClip;
+            audioSource.clip = triggerAreaAudioClip1;
             audioSource.Play();
+            yield return new WaitForSeconds(triggerAreaAudioClip1.length);
+        }
+
+        if (triggerAreaAudioClip2 != null)
+        {
+            audioSource.clip = triggerAreaAudioClip2;
+            audioSource.Play();
+            yield return new WaitForSeconds(triggerAreaAudioClip2.length);
         }
     }
 

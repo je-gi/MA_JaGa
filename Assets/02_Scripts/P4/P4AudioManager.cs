@@ -8,43 +8,35 @@ public class P4AudioManager : MonoBehaviour
     [Header("Audio Source")]
     public AudioSource audioSource;
 
-    [Header("Hand 1 Objekte")]
-    public GameObject h1p1;
-    public GameObject h1p2;
-    public GameObject h1p3;
-    public GameObject h1p4;
-
     [Header("Hand 1 Sockets")]
     public XRSocketInteractor h1s1;
     public XRSocketInteractor h1s2;
     public XRSocketInteractor h1s3;
-    public XRSocketInteractor h1s4;
 
-    [Header("Hand 1 Audio")]
-    public AudioClip h1p1GrabAudio;
+    [Header("Hand 2 Sockets")]
+    public XRSocketInteractor h2s1;
+    public XRSocketInteractor h2s2;
+    public XRSocketInteractor h2s3;
+
+    [Header("Audio Clips")] 
     public AudioClip h1s1FilledAudio;
-    public AudioClip h1p2GrabAudio;
     public AudioClip h1s2FilledAudio;
-    public AudioClip h1p3GrabAudio;
-    public AudioClip materialChangeAudio;
     public AudioClip h1s3FilledAudio;
-    public AudioClip h1p4GrabAudio;
-    public AudioClip shrinkAudio;
-    public AudioClip h1s4FilledAudio;
+    public AudioClip h1SpawnAudio1;
+    public AudioClip h1SpawnAudio2;
+    public AudioClip h2s1FilledAudio;
+    public AudioClip h2s2FilledAudio;
+    public AudioClip h2s3FilledAudio;
+    public AudioClip h2SpawnAudio;
 
-    private bool h1p1Grabbed = false;
-    private bool h1s1Filled = false;
-    private bool h1p2Grabbed = false;
-    private bool h1s2Filled = false;
-    private bool h1p3Grabbed = false;
-    private bool h1s3Filled = false;
-    private bool h1p4Grabbed = false;
-    private bool h1s4Filled = false;
-
-    [Header("VisibilityCallout Reference")]
-    public VisibilityCallout visibilityCallout;
-
-    private bool h1s4FilledTriggered = false;
+    private bool h1s1Played = false;
+    private bool h1s2Played = false;
+    private bool h1s3Played = false;
+    private bool h1Spawned = false;
+    private bool h2s1Played = false;
+    private bool h2s2Played = false;
+    private bool h2s3Played = false;
+    private bool h2Spawned = false;
 
     void Start()
     {
@@ -54,51 +46,63 @@ public class P4AudioManager : MonoBehaviour
 
     void Update()
     {
-        HandleHand1();
-    }
-
-    private void HandleHand1()
-    {
-        if (!h1p1Grabbed && IsGrabbed(h1p1))
+        if (!audioSource.isPlaying)
         {
-            PlayAudio(h1p1GrabAudio);
-            h1p1Grabbed = true;
-
-            visibilityCallout?.SetCalloutVisibility("GameViewCallout", true);
-            visibilityCallout?.SetCalloutVisibility("HierarchyCallout", true);
+            if (!h1s1Played && h1s1.hasSelection)
+            {
+                PlayAudio(h1s1FilledAudio);
+                h1s1Played = true;
+            }
+            else if (!h1s2Played && h1s2.hasSelection)
+            {
+                PlayAudio(h1s2FilledAudio);
+                h1s2Played = true;
+            }
+            else if (!h1s3Played && h1s3.hasSelection)
+            {
+                PlayAudio(h1s3FilledAudio);
+                h1s3Played = true;
+            }
+            else if (!h1Spawned && h1s1Played && h1s2Played && h1s3Played)
+            {
+                StartCoroutine(PlaySequential(h1SpawnAudio1, h1SpawnAudio2));
+                h1Spawned = true;
+            }
+            else if (!h2s1Played && h2s1.hasSelection)
+            {
+                PlayAudio(h2s1FilledAudio);
+                h2s1Played = true;
+            }
+            else if (!h2s2Played && h2s2.hasSelection)
+            {
+                PlayAudio(h2s2FilledAudio);
+                h2s2Played = true;
+            }
+            else if (!h2s3Played && h2s3.hasSelection)
+            {
+                PlayAudio(h2s3FilledAudio);
+                h2s3Played = true;
+            }
+            else if (!h2Spawned && h2s1Played && h2s2Played && h2s3Played)
+            {
+                PlayAudio(h2SpawnAudio);
+                h2Spawned = true;
+            }
         }
-
-        if (!h1p3Grabbed && IsGrabbed(h1p3))
-        {
-            PlayAudio(h1p3GrabAudio);
-            h1p3Grabbed = true;
-
-            visibilityCallout?.SetCalloutVisibility("InspectorCallout", true);
-        }
-    }
-
-    private bool IsGrabbed(GameObject obj)
-    {
-        var grab = obj?.GetComponent<XRGrabInteractable>();
-        return grab != null && grab.isSelected;
     }
 
     private void PlayAudio(AudioClip clip)
     {
-        if (clip != null && audioSource != null)
+        if (clip != null)
         {
-            if (audioSource.isPlaying)
-                audioSource.Stop();
             audioSource.PlayOneShot(clip);
         }
     }
 
-    public void DeactivateAllCallouts()
+    private System.Collections.IEnumerator PlaySequential(AudioClip first, AudioClip second)
     {
-        if (visibilityCallout == null) return;
-
-        visibilityCallout.SetCalloutVisibility("GameViewCallout", false);
-        visibilityCallout.SetCalloutVisibility("HierarchyCallout", false);
-        visibilityCallout.SetCalloutVisibility("InspectorCallout", false);
+        PlayAudio(first);
+        yield return new WaitForSeconds(first.length);
+        PlayAudio(second);
     }
 }

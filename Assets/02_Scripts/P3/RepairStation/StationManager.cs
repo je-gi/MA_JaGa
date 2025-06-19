@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class StationManager : MonoBehaviour
 {
@@ -8,10 +9,14 @@ public class StationManager : MonoBehaviour
     public GameObject[] miniGames;
     public Button[] levelButtons;
 
-    public AudioClip[] miniGameStartSounds;
+    [Header("Audio")]
     public AudioSource audioSource;
-    public AudioClip errorAudioClip;
-    public AudioClip successAudioClip;
+    public AudioClip[] miniGameIntroClips;
+    public AudioClip[] miniGameButtonClickClips;
+    public AudioClip[] miniGameErrorClips;
+    public AudioClip[] miniGameSuccessClip1;
+    public AudioClip[] miniGameSuccessClip2; 
+    public AudioClip miniGame4SuccessClip;
 
     public GameObject[] miniGame1AdditionalObjects;
     public GameObject[] miniGame2AdditionalObjects;
@@ -19,23 +24,17 @@ public class StationManager : MonoBehaviour
     public GameObject[] miniGame4AdditionalObjects;
 
     public MiniGameSocketChecker[] socketCheckers;
-
     public RepairStationCompletion repairStationCompletion;
 
     private int activeMiniGameIndex = -1;
-
-    private void Start() { }
 
     public void OnStationButtonClicked(int index)
     {
         if (levelButtons[index].interactable)
         {
             if (RepairStationIntroduction.instance != null)
-            {
                 RepairStationIntroduction.instance.InterruptIntroAndHidePanels();
-            }
 
-            PlayMiniGameSound(index);
             HideStationPanels();
             ShowMiniGame(index);
         }
@@ -68,6 +67,7 @@ public class StationManager : MonoBehaviour
         {
             miniGames[index].SetActive(true);
             activeMiniGameIndex = index;
+            PlayAudio(miniGameIntroClips[index]);
 
             switch (index)
             {
@@ -79,101 +79,85 @@ public class StationManager : MonoBehaviour
         }
     }
 
-    private void ShowAdditionalObjects(GameObject[] additionalObjects)
+    private void ShowAdditionalObjects(GameObject[] objects)
     {
-        if (additionalObjects != null)
-        {
-            foreach (var obj in additionalObjects)
-                if (obj != null) obj.SetActive(true);
-        }
+        if (objects == null) return;
+        foreach (var obj in objects) if (obj != null) obj.SetActive(true);
     }
 
-    private void HideAdditionalObjects(GameObject[] additionalObjects)
+    private void HideAdditionalObjects(GameObject[] objects)
     {
-        if (additionalObjects != null)
-        {
-            foreach (var obj in additionalObjects)
-                if (obj != null) obj.SetActive(false);
-        }
+        if (objects == null) return;
+        foreach (var obj in objects) if (obj != null) obj.SetActive(false);
     }
 
-    public void OnMiniGameCompleted()
+    public void OnMiniGameButtonPressed()
     {
-        if (activeMiniGameIndex != -1)
+        if (activeMiniGameIndex < 0) return;
+
+        PlayAudio(miniGameButtonClickClips[activeMiniGameIndex]);
+
+        var checker = socketCheckers[activeMiniGameIndex];
+        if (checker != null && !checker.AreAllSocketsCorrect())
         {
-            var checker = socketCheckers[activeMiniGameIndex];
-            if (checker != null && !checker.AreAllSocketsCorrect())
-            {
-                PlayErrorSound();
-                return;
-            }
-
-            PanelStateController.instance.OnLevelCompleted(activeMiniGameIndex);
-            miniGames[activeMiniGameIndex].SetActive(false);
-            PlaySuccessSound();
-
-            switch (activeMiniGameIndex)
-            {
-                case 0: HideAdditionalObjects(miniGame1AdditionalObjects); break;
-                case 1: HideAdditionalObjects(miniGame2AdditionalObjects); break;
-                case 2: HideAdditionalObjects(miniGame3AdditionalObjects); break;
-                case 3: HideAdditionalObjects(miniGame4AdditionalObjects); break;
-            }
-
-            ShowStationPanels();
-
-            if (activeMiniGameIndex == 3 && repairStationCompletion != null)
-            {
-                StartCoroutine(TriggerCompletionAfterDelay(2f));
-            }
-
-            activeMiniGameIndex = -1;
+            PlayAudio(miniGameErrorClips[activeMiniGameIndex]);
+            return;
         }
+
+        StartCoroutine(PlaySuccessAndFinishMiniGame());
     }
 
-    private System.Collections.IEnumerator TriggerCompletionAfterDelay(float delay)
+    private IEnumerator PlaySuccessAndFinishMiniGame()
+    {
+        if (activeMiniGameIndex <= 2)
+        {
+            PlayAudio(miniGameSuccessClip1[activeMiniGameIndex]);
+            yield return new WaitWhile(() => audioSource.isPlaying);
+
+            PlayAudio(miniGameSuccessClip2[activeMiniGameIndex]);
+            yield return new WaitWhile(() => audioSource.isPlaying);
+        }
+        else if (activeMiniGameIndex == 3)
+        {
+            PlayAudio(miniGame4SuccessClip);
+            yield return new WaitWhile(() => audioSource.isPlaying);
+        }
+
+        PanelStateController.instance.OnLevelCompleted(activeMiniGameIndex);
+        miniGames[activeMiniGameIndex].SetActive(false);
+
+        switch (activeMiniGameIndex)
+        {
+            case 0: HideAdditionalObjects(miniGame1AdditionalObjects); break;
+            case 1: HideAdditionalObjects(miniGame2AdditionalObjects); break;
+            case 2: HideAdditionalObjects(miniGame3AdditionalObjects); break;
+            case 3: HideAdditionalObjects(miniGame4AdditionalObjects); break;
+        }
+
+        ShowStationPanels();
+
+        if (activeMiniGameIndex == 3 && repairStationCompletion != null)
+        {
+            StartCoroutine(TriggerCompletionAfterDelay(2f));
+        }
+
+        activeMiniGameIndex = -1;
+    }
+
+    private IEnumerator TriggerCompletionAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         repairStationCompletion.TriggerCompletionManually();
     }
 
-    private void PlayMiniGameSound(int index)
+    private void PlayAudio(AudioClip clip)
     {
-        if (audioSource != null && miniGameStartSounds != null && index >= 0 && index < miniGameStartSounds.Length)
-        {
-            AudioClip clip = miniGameStartSounds[index];
-            if (clip != null)
-            {
-                if (audioSource.isPlaying)
-                    audioSource.Stop();
+        if (audioSource == null || clip == null) return;
 
-                audioSource.clip = clip;
-                audioSource.Play();
-            }
-        }
-    }
+        if (audioSource.isPlaying)
+            audioSource.Stop();
 
-    private void PlayErrorSound()
-    {
-        if (audioSource != null && errorAudioClip != null)
-        {
-            if (audioSource.isPlaying)
-                audioSource.Stop();
-
-            audioSource.clip = errorAudioClip;
-            audioSource.Play();
-        }
-    }
-
-    private void PlaySuccessSound()
-    {
-        if (audioSource != null && successAudioClip != null)
-        {
-            if (audioSource.isPlaying)
-                audioSource.Stop();
-
-            audioSource.clip = successAudioClip;
-            audioSource.Play();
-        }
+        audioSource.clip = clip;
+        audioSource.Play();
     }
 }
