@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97c23e3b12dc18c42a140437e53d3951, type: 3}
   m_Name: Tonemapping
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   mode:
     m_OverrideState: 1
     m_Value: 2
@@ -196,16 +196,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70afe9e12c7a7ed47911bb608a23a8ff, type: 3}
   m_Name: SplitToning
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {r: 0.38216448, g: 0.53465515, b: 0.7169812, a: 1}
+    m_Value: {r: 0.28132787, g: 0.45987844, b: 0.5471698, a: 1}
   highlights:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.7229173, b: 0.23113209, a: 1}
+    m_Value: {r: 1, g: 0.8073899, b: 0.5707547, a: 1}
   balance:
     m_OverrideState: 1
-    m_Value: -45.5
+    m_Value: -100
 --- !u!114 &2148481179225867373
 MonoBehaviour:
   m_ObjectHideFlags: 3
