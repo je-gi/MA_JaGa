@@ -3,11 +3,11 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _TintColor ("Tint Color", Color) = (1,1,1,1)
-        _Alpha ("Alpha", Range(0,1)) = 0.3
-        _FresnelPower ("Fresnel Power", Range(0.1, 10)) = 2.0
-        _MinY ("Fade Bottom (World Y)", Float) = 0.0
-        _MaxY ("Fade Top (World Y)", Float) = 2.0
+        _TintColor ("Tint Color", Color) = (0, 1, 1, 1)       // Cyanblau
+        _Alpha ("Alpha", Range(0,1)) = 0.0
+        _FresnelPower ("Fresnel Power", Range(0.1, 10)) = 0.1
+        _MinY ("Fade Bottom (World Y)", Float) = 0.96
+        _MaxY ("Fade Top (World Y)", Float) = 1.73
     }
 
     SubShader
@@ -23,6 +23,8 @@
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile_instancing
+            #pragma multi_compile _ UNITY_SINGLE_PASS_STEREO
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
@@ -33,11 +35,16 @@
             float _MinY;
             float _MaxY;
 
+            CBUFFER_START(UnityPerEye)
+            float3 unity_StereoWorldSpaceCameraPos[2];
+            CBUFFER_END
+
             struct appdata
             {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
@@ -47,15 +54,20 @@
                 float3 normal : TEXCOORD2;
                 float worldY : TEXCOORD3;
                 float4 vertex : SV_POSITION;
+                UNITY_VERTEX_OUTPUT_STEREO
             };
 
             v2f vert(appdata v)
             {
+                UNITY_SETUP_INSTANCE_ID(v);
                 v2f o;
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                o.viewDir = normalize(_WorldSpaceCameraPos - worldPos);
+                float3 cameraPos = unity_StereoWorldSpaceCameraPos[unity_StereoEyeIndex];
+                o.viewDir = normalize(cameraPos - worldPos);
                 o.normal = UnityObjectToWorldNormal(v.normal);
                 o.worldY = worldPos.y;
                 return o;
