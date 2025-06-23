@@ -3,6 +3,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using System.Collections;
+using System.Collections.Generic;
 
 public class P3Manager : MonoBehaviour
 {
@@ -22,8 +23,10 @@ public class P3Manager : MonoBehaviour
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
     [Header("Timing Settings")]
-    [Tooltip("Delay (in seconds) before the start audio begins.")]
     public float startAudioDelaySeconds = 2.0f;
+
+    [Header("Grabbable Objekte (werden nach Intro aktiv)")]
+    public List<GameObject> objectsToManage;
 
     [Header("Debug")]
     public bool activateManually = false;
@@ -32,6 +35,11 @@ public class P3Manager : MonoBehaviour
     private bool hasStarted = false;
     private bool hasTriggeredAudioPlayed = false;
     private bool startAudioFinished = false;
+
+    void Start()
+    {
+        SetObjectsInitialState(false);
+    }
 
     void Update()
     {
@@ -47,7 +55,6 @@ public class P3Manager : MonoBehaviour
             puzzleCompleted = true;
         }
 
-        // TriggerAreaAudio nur wenn StartAudio fertig und Puzzle aktiv ist
         if (hasStarted && startAudioFinished && !hasTriggeredAudioPlayed && triggerZone != null && IsCameraInTrigger())
         {
             PlayTriggerAreaAudio();
@@ -77,11 +84,28 @@ public class P3Manager : MonoBehaviour
             audioSource.Stop();
             audioSource.clip = startAudioClip;
             audioSource.Play();
-
             yield return new WaitWhile(() => audioSource.isPlaying);
         }
 
         startAudioFinished = true;
+        SetObjectsInitialState(true);
+    }
+
+    private void SetObjectsInitialState(bool enable)
+    {
+        foreach (var obj in objectsToManage)
+        {
+            if (obj == null) continue;
+
+            var rb = obj.GetComponent<Rigidbody>();
+            var grab = obj.GetComponent<XRGrabInteractable>();
+
+            if (rb != null)
+                rb.isKinematic = !enable;
+
+            if (grab != null)
+                grab.enabled = enable;
+        }
     }
 
     private void PlayCompletionAudio()
@@ -96,11 +120,7 @@ public class P3Manager : MonoBehaviour
 
     private bool IsCameraInTrigger()
     {
-        if (vrCameraTransform != null && triggerZone != null)
-        {
-            return triggerZone.bounds.Contains(vrCameraTransform.position);
-        }
-        return false;
+        return vrCameraTransform != null && triggerZone != null && triggerZone.bounds.Contains(vrCameraTransform.position);
     }
 
     private void PlayTriggerAreaAudio()

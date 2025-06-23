@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip lsiAudioClip;
     public AudioClip postSocketAudioClip;
+    public AudioClip SocketSFXClip;
     public AudioClip finalPuzzleCompletedAudioClip;
 
     [Header("LSI Objekte")]
@@ -71,6 +72,9 @@ public class GameManager : MonoBehaviour
 
         if (cardManagerObject != null)
             cardManagerObject.SetActive(false);
+
+        if (socketInteractor != null)
+            socketInteractor.enabled = false;
     }
 
     private void HandleIntroCompleted()
@@ -100,18 +104,27 @@ public class GameManager : MonoBehaviour
 
         HideObjectsOnLSIComplete();
 
-        if (audioSource != null && lsiAudioClip != null)
-        {
-            audioSource.clip = lsiAudioClip;
-            audioSource.Play();
-        }
-
         SetPuzzleOrder(learningType);
 
         if (!firstPuzzleStarted)
         {
-            StartCoroutine(WaitForObjectInSocketAndStartPuzzle());
+            StartCoroutine(PlayLSIAudioAndEnableSocket());
         }
+    }
+
+    private IEnumerator PlayLSIAudioAndEnableSocket()
+    {
+        if (audioSource != null && lsiAudioClip != null)
+        {
+            audioSource.clip = lsiAudioClip;
+            audioSource.Play();
+            yield return new WaitWhile(() => audioSource.isPlaying);
+        }
+
+        if (socketInteractor != null)
+            socketInteractor.enabled = true;
+
+        StartCoroutine(WaitForObjectInSocketAndStartPuzzle());
     }
 
     private void HideObjectsOnLSIComplete()
@@ -139,11 +152,21 @@ public class GameManager : MonoBehaviour
         while (!socketInteractor.hasSelection)
             yield return null;
 
-        if (audioSource != null && postSocketAudioClip != null)
+        if (audioSource != null)
         {
-            audioSource.clip = postSocketAudioClip;
-            audioSource.Play();
-            yield return new WaitWhile(() => audioSource.isPlaying);
+            if (SocketSFXClip != null)
+            {
+                audioSource.clip = SocketSFXClip;
+                audioSource.Play();
+                yield return new WaitWhile(() => audioSource.isPlaying);
+            }
+
+            if (postSocketAudioClip != null)
+            {
+                audioSource.clip = postSocketAudioClip;
+                audioSource.Play();
+                yield return new WaitWhile(() => audioSource.isPlaying);
+            }
         }
 
         HideInitialObjects();

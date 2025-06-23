@@ -7,6 +7,7 @@ public class DusterGrab : MonoBehaviour
 {
     public AudioSource audioSource;
     public AudioClip grabAudio;
+    public AudioClip dustingAudio;
     public SnailGrab snail;
     public float minMoveDistance = 0.1f;
     public int requiredDustings = 5;
@@ -51,8 +52,11 @@ public class DusterGrab : MonoBehaviour
                 lastPosition = transform.position;
 
                 if (dustVFX != null)
-                {
                     dustVFX.Play();
+
+                if (dustingAudio != null && audioSource != null)
+                {
+                    audioSource.PlayOneShot(dustingAudio);
                 }
 
                 if (dustingCounter >= requiredDustings)
@@ -72,17 +76,13 @@ public class DusterGrab : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Snail"))
-        {
             isTouchingSnail = true;
-        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Snail"))
-        {
             isTouchingSnail = false;
-        }
     }
 
     private void PlayGrabSound()
