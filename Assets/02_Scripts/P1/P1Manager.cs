@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class P1Manager : MonoBehaviour
 {
     public AudioSource audioSource;
+    public AudioSource loopAudioSource;
     public AudioClip clipIntro;
     public AudioClip clipOnTriggerEntered;
     public AudioClip clipOnSuccess;
@@ -15,6 +16,8 @@ public class P1Manager : MonoBehaviour
     public AudioClip clipOnPuzzleCompleted;
     public AudioClip clipOnObjectGrabbed;
     public AudioClip clipOnRevealObjects;
+    public AudioClip backgroundLoopClip;
+    public float fadeOutDuration = 2f;
 
     public Collider triggerZone;
     public Transform vrCameraTransform;
@@ -35,7 +38,6 @@ public class P1Manager : MonoBehaviour
     public List<SocketAudioPair> socketAudioPairs;
     public ShowObjectsWhenSocketsFilled showObjectsScript;
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
-
     public VisibilityCallout visibilityCallout;
 
     public bool activateManually = false;
@@ -49,7 +51,6 @@ public class P1Manager : MonoBehaviour
     private bool puzzleCompleted = false;
     private bool revealAudioPlayed = false;
     private bool canPlayTriggerAudio = false;
-
     private bool successClipFinished = false;
 
     void Start()
@@ -127,6 +128,11 @@ public class P1Manager : MonoBehaviour
             PlayClip(clipOnPuzzleCompleted);
             puzzleCompleted = true;
 
+            if (loopAudioSource != null && loopAudioSource.isPlaying)
+            {
+                StartCoroutine(FadeOutLoopAudio());
+            }
+
             if (showObjectsScript != null)
             {
                 showObjectsScript.StopAnimation();
@@ -175,6 +181,14 @@ public class P1Manager : MonoBehaviour
         if (isCompleted)
         {
             PlayClipWithCallback(clipOnSuccess, OnSuccessClipFinished);
+
+            if (loopAudioSource != null && backgroundLoopClip != null)
+            {
+                loopAudioSource.clip = backgroundLoopClip;
+                loopAudioSource.loop = true;
+                loopAudioSource.Play();
+            }
+
             if (objectToTrack1 != null) objectToTrack1.SetActive(true);
             if (socketToEnableAfterSuccess != null) socketToEnableAfterSuccess.gameObject.SetActive(true);
 
@@ -258,6 +272,20 @@ public class P1Manager : MonoBehaviour
     {
         if (visibilityCallout != null)
             visibilityCallout.SetCalloutVisibility(key, false);
+    }
+
+    IEnumerator FadeOutLoopAudio()
+    {
+        float startVolume = loopAudioSource.volume;
+        float elapsed = 0f;
+        while (elapsed < fadeOutDuration)
+        {
+            loopAudioSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeOutDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        loopAudioSource.Stop();
+        loopAudioSource.volume = startVolume;
     }
 
     public bool IsPuzzleCompleted => puzzleCompleted;

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Audio")]
     public AudioSource audioSource;
+    public AudioSource finalAudioSource;
     public AudioClip lsiAudioClip;
     public AudioClip postSocketAudioClip;
     public AudioClip SocketSFXClip;
@@ -43,6 +44,10 @@ public class GameManager : MonoBehaviour
     [Header("Callout Sichtbarkeit")]
     public VisibilityCallout visibilityCallout;
     public string lsiCalloutKey = "LSICallout";
+
+    [Header("Debug")]
+    public bool forceCompleteGame = false;
+    private bool hasForcedCompletion = false;
 
     private bool firstPuzzleStarted = false;
     private Queue<MonoBehaviour> puzzleQueue = new Queue<MonoBehaviour>();
@@ -77,6 +82,16 @@ public class GameManager : MonoBehaviour
             socketInteractor.enabled = false;
     }
 
+    private void Update()
+    {
+        if (forceCompleteGame && !hasForcedCompletion)
+        {
+            forceCompleteGame = false;
+            hasForcedCompletion = true;
+            StartCoroutine(PlayFinalAudioAndEnd());
+        }
+    }
+
     private void HandleIntroCompleted()
     {
         if (cardManagerObject != null)
@@ -103,7 +118,6 @@ public class GameManager : MonoBehaviour
             learningTypeCalculator.ShowLearningTypeObject(learningType);
 
         HideObjectsOnLSIComplete();
-
         SetPuzzleOrder(learningType);
 
         if (!firstPuzzleStarted)
@@ -267,11 +281,11 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator PlayFinalAudioAndEnd()
     {
-        if (finalPuzzleCompletedAudioClip != null && audioSource != null)
+        if (finalPuzzleCompletedAudioClip != null && finalAudioSource != null)
         {
-            audioSource.clip = finalPuzzleCompletedAudioClip;
-            audioSource.Play();
-            yield return new WaitWhile(() => audioSource.isPlaying);
+            finalAudioSource.clip = finalPuzzleCompletedAudioClip;
+            finalAudioSource.Play();
+            yield return new WaitWhile(() => finalAudioSource.isPlaying);
         }
 
         if (introManager != null && introManager.fadeScreen != null)
