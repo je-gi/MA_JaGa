@@ -1,39 +1,30 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class P4Manager : MonoBehaviour
 {
-    [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip startAudioClip;
     public AudioClip completionAudioClip;
     public AudioClip triggerAreaAudioClip1;
     public AudioClip triggerAreaAudioClip2;
 
-    [Header("Trigger Zone")]
     public Collider triggerZone;
-
-    [Header("Camera (VR)")]
     public Transform vrCameraTransform;
-
-    [Header("Socket Checker")]
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
-    [Header("Debug")]
     public bool activateManually = false;
-
-    [Header("Start Sound Delay")]
     public float startDelay = 2f;
 
-    [Header("VisibilityCallout Reference")]
     public VisibilityCallout visibilityCallout;
+    public XRSocketInteractor h1Socket2;
 
     private bool puzzleCompleted = false;
     private bool hasStarted = false;
     private bool hasTriggeredAudioPlayed = false;
     private bool startAudioFinished = false;
-
     private bool structureCalloutShown = false;
     private bool projectFolderCalloutShown = false;
 
@@ -77,11 +68,18 @@ public class P4Manager : MonoBehaviour
             if (visibilityCallout != null)
             {
                 visibilityCallout.SetCalloutVisibility("ProjectFolderCallout", true);
+                visibilityCallout.SetCalloutVisibility("GameViewCallout", true);
+                visibilityCallout.SetCalloutVisibility("HierarchyCallout", true);
                 projectFolderCalloutShown = true;
 
                 visibilityCallout.SetCalloutVisibility("StructureCallout", false);
                 structureCalloutShown = false;
             }
+        }
+
+        if (projectFolderCalloutShown && h1Socket2 != null && h1Socket2.hasSelection)
+        {
+            visibilityCallout.SetCalloutVisibility("InspectorCallout", true);
         }
     }
 

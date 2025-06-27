@@ -5,20 +5,19 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class P4AudioManager : MonoBehaviour
 {
-    [Header("Audio Source")]
     public AudioSource audioSource;
 
-    [Header("Hand 1 Sockets")]
     public XRSocketInteractor h1s1;
     public XRSocketInteractor h1s2;
     public XRSocketInteractor h1s3;
+    public XRSocketInteractor h1s4;
 
-    [Header("Hand 2 Sockets")]
     public XRSocketInteractor h2s1;
     public XRSocketInteractor h2s2;
     public XRSocketInteractor h2s3;
 
-    [Header("Audio Clips")] 
+    public XRSocketInteractor robotSocket;
+
     public AudioClip h1s1FilledAudio;
     public AudioClip h1s2FilledAudio;
     public AudioClip h1s3FilledAudio;
@@ -32,7 +31,10 @@ public class P4AudioManager : MonoBehaviour
     private bool h1s1Played = false;
     private bool h1s2Played = false;
     private bool h1s3Played = false;
-    private bool h1Spawned = false;
+    private bool h1s4Played = false;
+    private bool h1SpawnAudio1Played = false;
+    private bool h1SpawnAudio2Played = false;
+
     private bool h2s1Played = false;
     private bool h2s2Played = false;
     private bool h2s3Played = false;
@@ -63,10 +65,16 @@ public class P4AudioManager : MonoBehaviour
                 PlayAudio(h1s3FilledAudio);
                 h1s3Played = true;
             }
-            else if (!h1Spawned && h1s1Played && h1s2Played && h1s3Played)
+            else if (!h1s4Played && h1s4 != null && h1s4.hasSelection)
             {
-                StartCoroutine(PlaySequential(h1SpawnAudio1, h1SpawnAudio2));
-                h1Spawned = true;
+                PlayAudio(h1SpawnAudio1);
+                h1s4Played = true;
+                h1SpawnAudio1Played = true;
+            }
+            else if (h1SpawnAudio1Played && !h1SpawnAudio2Played && robotSocket != null && robotSocket.hasSelection)
+            {
+                PlayAudio(h1SpawnAudio2);
+                h1SpawnAudio2Played = true;
             }
             else if (!h2s1Played && h2s1.hasSelection)
             {
@@ -97,12 +105,5 @@ public class P4AudioManager : MonoBehaviour
         {
             audioSource.PlayOneShot(clip);
         }
-    }
-
-    private System.Collections.IEnumerator PlaySequential(AudioClip first, AudioClip second)
-    {
-        PlayAudio(first);
-        yield return new WaitForSeconds(first.length);
-        PlayAudio(second);
     }
 }
