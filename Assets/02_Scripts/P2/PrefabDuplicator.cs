@@ -16,12 +16,14 @@ public class PrefabDuplicator : MonoBehaviour
     public GameObject objectToShowWhenCardPresent;
 
     [Header("Audio")]
-    public AudioSource sfxAudioSource;            
+    public AudioSource sfxAudioSource;
     public AudioClip successSound;
     public AudioClip errorSound;
 
-    public AudioSource firstSpawnAudioSource;    
-    public AudioClip firstSpawnAudio;
+    public AudioSource eventAudioSource;
+    public AudioClip eyeSocketInsertedAudio;
+    public AudioClip normalEyeSpawnAudio;
+    public AudioClip animatedEyeSpawnAudio;
 
     [Header("Partikeleffekt beim Spawn")]
     public ParticleSystem spawnParticleEffect;
@@ -33,7 +35,9 @@ public class PrefabDuplicator : MonoBehaviour
     [Header("Puzzle")]
     public P2Manager p2Manager;
 
-    private bool hasSpawnedOnce = false;
+    private bool hasEyeSocketBeenFilled = false;
+    private bool hasNormalEyeSpawned = false;
+    private bool hasAnimatedEyeSpawned = false;
 
     private void Update()
     {
@@ -41,6 +45,13 @@ public class PrefabDuplicator : MonoBehaviour
         {
             objectToShowWhenCardPresent.SetActive(cardSocket.hasSelection);
         }
+
+        if (eyeSocket.hasSelection && !hasEyeSocketBeenFilled)
+        {
+            PlaySound(eventAudioSource, eyeSocketInsertedAudio);
+            hasEyeSocketBeenFilled = true;
+        }
+
         if (animationCalloutShown && p2Manager != null && p2Manager.IsPuzzleCompleted)
         {
             visibilityCallout.SetCalloutVisibility("AnimationCallout", false);
@@ -56,23 +67,22 @@ public class PrefabDuplicator : MonoBehaviour
             return;
         }
 
-        GameObject prefabToSpawn = cardSocket.hasSelection ? greenEyeAnimatedPrefab : greenEyePrefab;
+        bool isAnimated = cardSocket.hasSelection;
+        GameObject prefabToSpawn = isAnimated ? greenEyeAnimatedPrefab : greenEyePrefab;
         GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
 
         PlaySound(sfxAudioSource, successSound);
         PlaySpawnEffect();
 
-        if (!hasSpawnedOnce)
+        if (isAnimated && !hasAnimatedEyeSpawned)
         {
-            PlaySound(firstSpawnAudioSource, firstSpawnAudio);
-
-            if (visibilityCallout != null)
-            {
-                visibilityCallout.SetCalloutVisibility("AnimationCallout", true);
-                animationCalloutShown = true;
-            }
-
-            hasSpawnedOnce = true;
+            PlaySound(eventAudioSource, animatedEyeSpawnAudio);
+            hasAnimatedEyeSpawned = true;
+        }
+        else if (!isAnimated && !hasNormalEyeSpawned)
+        {
+            PlaySound(eventAudioSource, normalEyeSpawnAudio);
+            hasNormalEyeSpawned = true;
         }
 
         if (TryGetComponent<GlassesShow>(out var glassesShow))

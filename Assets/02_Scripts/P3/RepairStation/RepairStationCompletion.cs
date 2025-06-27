@@ -9,7 +9,11 @@ public class RepairStationCompletion : MonoBehaviour
     public GameObject objectToHide;
 
     public AudioSource snailAudioSource;
-    public AudioClip snailClip; 
+    public AudioClip snailClip;
+
+    public ParticleSystem bootsParticleEffect;
+    public AudioSource bootsAudioSource;
+    public AudioClip bootsSoundClip;
 
     private bool completionTriggered = false;
 
@@ -47,6 +51,14 @@ public class RepairStationCompletion : MonoBehaviour
 
         if (bootsObject != null)
             bootsObject.SetActive(true);
+
+        if (bootsParticleEffect != null)
+            bootsParticleEffect.Play();
+
+        if (bootsAudioSource != null && bootsSoundClip != null)
+        {
+            bootsAudioSource.PlayOneShot(bootsSoundClip);
+        }
 
         if (objectToHide != null)
             objectToHide.SetActive(false);

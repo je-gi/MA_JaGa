@@ -126,7 +126,9 @@ public class EyeFusion : MonoBehaviour
             (tag1.Contains("Yellow") && tag2.Contains("Purple")) ||
             (tag1.Contains("Purple") && tag2.Contains("Yellow")) ||
             (tag1.Contains("Orange") && tag2.Contains("Purple")) ||
-            (tag1.Contains("Purple") && tag2.Contains("Orange")))
+            (tag1.Contains("Purple") && tag2.Contains("Orange")) ||
+            (tag1.Contains("Red") && tag2.Contains("Orange")) ||
+            (tag1.Contains("Orange") && tag2.Contains("Red")))
             return "Orange";
 
         if ((tag1.Contains("Purple") && tag2.Contains("Purple")) ||
@@ -144,7 +146,9 @@ public class EyeFusion : MonoBehaviour
             (tag1.Contains("Green") && tag2.Contains("Orange")) ||
             (tag1.Contains("Orange") && tag2.Contains("Green")) ||
             (tag1.Contains("Blue") && tag2.Contains("Orange")) ||
-            (tag1.Contains("Orange") && tag2.Contains("Blue")))
+            (tag1.Contains("Orange") && tag2.Contains("Blue")) ||
+            (tag1.Contains("Yellow") && tag2.Contains("Green")) ||
+            (tag1.Contains("Green") && tag2.Contains("Yellow")))
             return "Green";
 
         if ((tag1.Contains("Yellow") && tag2.Contains("Yellow")) ||
@@ -158,8 +162,10 @@ public class EyeFusion : MonoBehaviour
             return "Red";
 
         if ((tag1.Contains("Blue") && tag2.Contains("Blue")) ||
-            (tag1.Contains("Purple") && tag2.Contains("Green")) ||
-            (tag1.Contains("Green") && tag2.Contains("Purple")))
+            (tag1.Contains("Purple") && tag2.Contains("Blue")) ||
+            (tag1.Contains("Blue") && tag2.Contains("Purple")) ||
+            (tag1.Contains("Blue") && tag2.Contains("Green")) ||
+            (tag1.Contains("Green") && tag2.Contains("Blue")))
             return "Blue";
 
         return "Undefined";
