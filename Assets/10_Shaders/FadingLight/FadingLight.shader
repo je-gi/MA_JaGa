@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _TintColor ("Tint Color", Color) = (0, 1, 1, 1)       // Cyanblau
+        _TintColor ("Tint Color", Color) = (0, 1, 1, 1)
         _Alpha ("Alpha", Range(0,1)) = 0.0
         _FresnelPower ("Fresnel Power", Range(0.1, 10)) = 0.1
         _MinY ("Fade Bottom (World Y)", Float) = 0.96
@@ -35,10 +35,6 @@
             float _MinY;
             float _MaxY;
 
-            CBUFFER_START(UnityPerEye)
-            float3 unity_StereoWorldSpaceCameraPos[2];
-            CBUFFER_END
-
             struct appdata
             {
                 float4 vertex : POSITION;
@@ -66,7 +62,13 @@
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                float3 cameraPos = unity_StereoWorldSpaceCameraPos[unity_StereoEyeIndex];
+
+                #if defined(UNITY_STEREO_INSTANCING_ENABLED) || defined(UNITY_STEREO_MULTIVIEW_ENABLED)
+                    float3 cameraPos = unity_StereoWorldSpaceCameraPos[unity_StereoEyeIndex];
+                #else
+                    float3 cameraPos = _WorldSpaceCameraPos;
+                #endif
+
                 o.viewDir = normalize(cameraPos - worldPos);
                 o.normal = UnityObjectToWorldNormal(v.normal);
                 o.worldY = worldPos.y;

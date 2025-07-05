@@ -37,6 +37,11 @@ public class EyeFusion : MonoBehaviour
     public AudioClip spawnSound;
     public VisualEffect spawnVFX;
 
+    [Header("Audio bei richtigem Auge")]
+    public AudioClip correctEyeAudio;
+    public AudioSource correctEyeAudioSource;
+    private bool hasPlayedCorrectEyeAudio = false;
+
     private List<GameObject> eyesInTrigger = new List<GameObject>();
     public GlassesShow glassesShow;
 
@@ -74,8 +79,6 @@ public class EyeFusion : MonoBehaviour
         string tag1 = eye1.tag;
         string tag2 = eye2.tag;
 
-        Debug.Log("Combining Eyes: " + tag1 + " + " + tag2);
-
         Destroy(eye1);
         Destroy(eye2);
         eyesInTrigger.Clear();
@@ -88,9 +91,6 @@ public class EyeFusion : MonoBehaviour
         GameObject prefabToSpawn = null;
         string colorResult = GetColorResult(tag1, tag2);
         string sizeResult = GetSizeResult(tag1, tag2);
-
-        Debug.Log("Color Result: " + colorResult);
-        Debug.Log("Size Result: " + sizeResult);
 
         prefabToSpawn = GetPrefab(colorResult, sizeResult);
 
@@ -111,10 +111,15 @@ public class EyeFusion : MonoBehaviour
                 spawnVFX.transform.position = fusionPoint.position;
                 spawnVFX.Play();
             }
-        }
-        else
-        {
-            Debug.LogError("Prefab to spawn is null! Color: " + colorResult + ", Size: " + sizeResult);
+
+            if (colorResult == "Green" && sizeResult == "Medium" && !hasPlayedCorrectEyeAudio)
+            {
+                if (correctEyeAudio != null && correctEyeAudioSource != null)
+                {
+                    correctEyeAudioSource.PlayOneShot(correctEyeAudio);
+                    hasPlayedCorrectEyeAudio = true;
+                }
+            }
         }
     }
 

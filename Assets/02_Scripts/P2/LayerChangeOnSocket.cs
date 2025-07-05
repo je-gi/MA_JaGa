@@ -22,6 +22,10 @@ public class LayerChangeOnSocket : MonoBehaviour
     [Header("Puzzle Completion")]
     [SerializeField] private P2Manager puzzleManager;
 
+    [Header("Zusätzlicher Callout: Animation")]
+    [SerializeField] private string animationCalloutID = "AnimationCallout";
+    private bool animationCalloutShown = false;
+
     private bool calloutShown = false;
 
     public void ChangeLayerInSocket()
@@ -33,13 +37,8 @@ public class LayerChangeOnSocket : MonoBehaviour
             if (selectedInteractable != null)
             {
                 GameObject selectedObject = selectedInteractable.gameObject;
-
                 SetInteractionLayer(selectedObject);
             }
-        }
-        else
-        {
-            Debug.LogWarning("No object is currently in the socket.");
         }
     }
 
@@ -53,18 +52,12 @@ public class LayerChangeOnSocket : MonoBehaviour
             {
                 InteractionLayerMask currentLayerMask = interactable.interactionLayers;
                 InteractionLayerMask newLayerMask = AddInteractionLayer(currentLayerMask, layerToAdd);
-
                 interactable.interactionLayers = newLayerMask;
-
-                Debug.Log("Added interaction layer.");
 
                 PlayAudio();
                 PlayParticleEffect();
                 ShowPrefabCallout();
-            }
-            else
-            {
-                Debug.LogError("XRGrabInteractable component not found on the object.");
+                ShowAnimationCallout();
             }
         }
     }
@@ -104,6 +97,15 @@ public class LayerChangeOnSocket : MonoBehaviour
         }
     }
 
+    private void ShowAnimationCallout()
+    {
+        if (visibilityCallout != null && !animationCalloutShown)
+        {
+            visibilityCallout.SetCalloutVisibility(animationCalloutID, true);
+            animationCalloutShown = true;
+        }
+    }
+
     private void Update()
     {
         if (calloutShown && puzzleManager != null && puzzleManager.IsPuzzleCompleted)
@@ -112,6 +114,15 @@ public class LayerChangeOnSocket : MonoBehaviour
             {
                 visibilityCallout.SetCalloutVisibility("PrefabCallout", false);
                 calloutShown = false;
+            }
+        }
+
+        if (animationCalloutShown && puzzleManager != null && puzzleManager.IsPuzzleCompleted)
+        {
+            if (visibilityCallout != null)
+            {
+                visibilityCallout.SetCalloutVisibility(animationCalloutID, false);
+                animationCalloutShown = false;
             }
         }
     }
