@@ -29,14 +29,14 @@ MonoBehaviour:
   - 'LSI: Card'
   - 'P1: Part'
   - 'P2: Part'
-  - 'P3: Part'
+  - 'P3: PartLeft'
   - 'P4: FinalPart01'
   - 'LSI: LearningTypeObject'
   - 'P2: Duplicator'
   - 'P4: Spraygun'
   - 'P4: Expandgun'
   - 'P4: FinalPart02'
-  - 
+  - 'P3: PartRight'
   - 
   - 
   - 
