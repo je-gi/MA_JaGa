@@ -6,27 +6,22 @@ using TMPro;
 
 public class HandAssemblyManager : MonoBehaviour
 {
-    [Header("Hand 1")]
     public List<XRSocketInteractor> hand1Sockets;
     public List<GameObject> hand1Parts;
     public GameObject hand1Model;
     public Spraycan spray1;
     public Expandgun expand1;
 
-    [Header("Hand 2")]
     public List<XRSocketInteractor> hand2Sockets;
     public List<GameObject> hand2Parts;
     public GameObject hand2Model;
     public Spraycan spray2;
 
-    [Header("SocketChecker")]
     public DisableGrabAndMakeKinematicOnSocket socketCheckerScript;
 
-    [Header("UI Text Management")]
     public TextMeshProUGUI uiText;
     private Dictionary<string, string> objectTextDict = new Dictionary<string, string>();
 
-    [Header("Audio Management")]
     public AudioClip hand1CompleteAudio;
     public AudioClip hand2CompleteAudio;
     public AudioClip hand2StartAudio;
@@ -34,7 +29,6 @@ public class HandAssemblyManager : MonoBehaviour
     public AudioSource hand1AudioSource;
     public AudioSource hand2AudioSource;
 
-    [Header("Particle Effects")]
     public ParticleSystem hand1Particles;
     public ParticleSystem hand2Particles;
 
@@ -140,7 +134,18 @@ public class HandAssemblyManager : MonoBehaviour
         SetActiveList(parts, false);
 
         if (model != null)
+        {
             model.SetActive(true);
+
+            if (handIndex == 2)
+            {
+                P4AudioManager audioManager = FindObjectOfType<P4AudioManager>();
+                if (audioManager != null)
+                {
+                    audioManager.PlayH2SpawnSound();
+                }
+            }
+        }
 
         if (handIndex == 1)
         {

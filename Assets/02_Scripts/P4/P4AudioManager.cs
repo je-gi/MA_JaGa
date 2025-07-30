@@ -91,11 +91,6 @@ public class P4AudioManager : MonoBehaviour
                 PlayAudio(h2s3FilledAudio);
                 h2s3Played = true;
             }
-            else if (!h2Spawned && h2s1Played && h2s2Played && h2s3Played)
-            {
-                PlayAudio(h2SpawnAudio);
-                h2Spawned = true;
-            }
         }
     }
 
@@ -104,6 +99,15 @@ public class P4AudioManager : MonoBehaviour
         if (clip != null)
         {
             audioSource.PlayOneShot(clip);
+        }
+    }
+
+    public void PlayH2SpawnSound()
+    {
+        if (!h2Spawned && h2SpawnAudio != null)
+        {
+            audioSource.PlayOneShot(h2SpawnAudio);
+            h2Spawned = true;
         }
     }
 }
