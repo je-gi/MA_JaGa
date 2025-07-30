@@ -5,21 +5,29 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class P4Manager : MonoBehaviour
 {
-    public AudioSource audioSource;
-    public AudioClip startAudioClip;
-    public AudioClip completionAudioClip;
+    [Header("Trigger Zone")]
+    public Collider triggerZone;
+    public Transform PlayerCamera;
     public AudioClip triggerAreaAudioClip1;
     public AudioClip triggerAreaAudioClip2;
 
-    public Collider triggerZone;
-    public Transform vrCameraTransform;
-    public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip startAudioClip;
+    public AudioClip completionAudioClip;
 
-    public bool activateManually = false;
+    [Header("Sockets")]
+    public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
+    public XRSocketInteractor h1Socket2;
+
+    [Header("Timing")]
     public float startDelay = 2f;
 
+    [Header("Callout Visibility")]
     public VisibilityCallout visibilityCallout;
-    public XRSocketInteractor h1Socket2;
+
+    [Header("Debug")]
+    public bool activateManually = false;
 
     private bool puzzleCompleted = false;
     private bool hasStarted = false;
@@ -137,9 +145,9 @@ public class P4Manager : MonoBehaviour
 
     private bool IsCameraInTrigger()
     {
-        if (vrCameraTransform != null && triggerZone != null)
+        if (PlayerCamera != null && triggerZone != null)
         {
-            return triggerZone.bounds.Contains(vrCameraTransform.position);
+            return triggerZone.bounds.Contains(PlayerCamera.position);
         }
         return false;
     }

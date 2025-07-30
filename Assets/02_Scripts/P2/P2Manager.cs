@@ -6,23 +6,20 @@ using System.Collections;
 
 public class P2Manager : MonoBehaviour
 {
+    [Header("Trigger Zone")]
+    public Collider triggerZone;
+    public Transform PlayerCamera;
+
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip startAudioClip;
     public AudioClip completionAudioClip;
     public AudioClip triggerAreaAudioClip;
 
-    [Header("Trigger Zone")]
-    public Collider triggerZone;
-
-    [Header("Camera (VR)")]
-    public Transform vrCameraTransform;
-
-    [Header("Socket Checker")]
+    [Header("Sockets")]
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
-    [Header("Timing Settings")]
-    [Tooltip("Delay (in seconds) before the start audio begins.")]
+    [Header("Timing")]
     public float startAudioDelaySeconds = 2.0f;
 
     [Header("Debug")]
@@ -95,9 +92,9 @@ public class P2Manager : MonoBehaviour
 
     private bool IsCameraInTrigger()
     {
-        if (vrCameraTransform != null && triggerZone != null)
+        if (PlayerCamera != null && triggerZone != null)
         {
-            return triggerZone.bounds.Contains(vrCameraTransform.position);
+            return triggerZone.bounds.Contains(PlayerCamera.position);
         }
         return false;
     }

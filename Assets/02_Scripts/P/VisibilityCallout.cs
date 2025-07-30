@@ -8,8 +8,6 @@ public class VisibilityCallout : MonoBehaviour
         public string key;
         public GameObject targetObject;
     }
-
-    [Header("Zuweisbare Callouts")]
     public CalloutEntry[] callouts;
 
     public void SetCalloutVisibility(string key, bool visible)

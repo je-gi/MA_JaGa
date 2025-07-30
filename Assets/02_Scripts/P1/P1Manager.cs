@@ -7,6 +7,11 @@ using System.Collections.Generic;
 
 public class P1Manager : MonoBehaviour
 {
+    [Header("Trigger Zone")]
+    public Collider triggerZone;
+    public Transform PlayerCamera;
+
+    [Header("Audio")]
     public AudioSource audioSource;
     public AudioSource loopAudioSource;
     public AudioClip clipIntro;
@@ -19,9 +24,7 @@ public class P1Manager : MonoBehaviour
     public AudioClip backgroundLoopClip;
     public float fadeOutDuration = 2f;
 
-    public Collider triggerZone;
-    public Transform vrCameraTransform;
-
+    [Header("Sockets")]
     public SocketChecking socketChecker;
     public GameObject objectToTrack1;
     public XRSocketInteractor socketToEnableAfterSuccess;
@@ -40,8 +43,6 @@ public class P1Manager : MonoBehaviour
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
     public VisibilityCallout visibilityCallout;
 
-    public bool activateManually = false;
-
     [Header("Timing")]
     public float introDelaySeconds = 2f;
     public float postIntroTriggerDelay = 1f;
@@ -52,6 +53,9 @@ public class P1Manager : MonoBehaviour
     private bool revealAudioPlayed = false;
     private bool canPlayTriggerAudio = false;
     private bool successClipFinished = false;
+
+    [Header("Debug")]
+    public bool activateManually = false;
 
     void Start()
     {
@@ -140,13 +144,25 @@ public class P1Manager : MonoBehaviour
         }
     }
 
-    bool IsCameraInTrigger()
+    void CheckRevealObjectsFromExternalScript()
     {
-        if (vrCameraTransform != null && triggerZone != null)
+        if (showObjectsScript != null && showObjectsScript.AlreadyShown && !revealAudioPlayed)
         {
-            return triggerZone.bounds.Contains(vrCameraTransform.position);
+            revealAudioPlayed = true;
+            StartCoroutine(PlayRevealClipWithDelay());
         }
-        return false;
+    }
+
+    IEnumerator PlayRevealClipWithDelay()
+    {
+        yield return new WaitForSeconds(1f);
+
+        if (clipOnRevealObjects != null && audioSource != null)
+        {
+            audioSource.Stop();
+            audioSource.clip = clipOnRevealObjects;
+            audioSource.Play();
+        }
     }
 
     void PlayClip(AudioClip clip)
@@ -174,6 +190,20 @@ public class P1Manager : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         callback?.Invoke();
+    }
+
+    IEnumerator FadeOutLoopAudio()
+    {
+        float startVolume = loopAudioSource.volume;
+        float elapsed = 0f;
+        while (elapsed < fadeOutDuration)
+        {
+            loopAudioSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeOutDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        loopAudioSource.Stop();
+        loopAudioSource.volume = startVolume;
     }
 
     void OnPuzzleStatusChanged(bool isCompleted)
@@ -229,37 +259,13 @@ public class P1Manager : MonoBehaviour
         }
     }
 
-    void CheckRevealObjectsFromExternalScript()
+    bool IsCameraInTrigger()
     {
-        if (showObjectsScript != null && showObjectsScript.AlreadyShown && !revealAudioPlayed)
+        if (PlayerCamera != null && triggerZone != null)
         {
-            revealAudioPlayed = true;
-            StartCoroutine(PlayRevealClipWithDelay());
+            return triggerZone.bounds.Contains(PlayerCamera.position);
         }
-    }
-
-    IEnumerator PlayRevealClipWithDelay()
-    {
-        yield return new WaitForSeconds(1f);
-
-        if (clipOnRevealObjects != null && audioSource != null)
-        {
-            audioSource.Stop();
-            audioSource.clip = clipOnRevealObjects;
-            audioSource.Play();
-        }
-    }
-
-    void OnTriggerClipFinished()
-    {
-        ShowCallout("AudioClipCallout");
-        ShowCallout("AudioSourceCallout");
-    }
-
-    void OnSuccessClipFinished()
-    {
-        successClipFinished = true;
-        ShowCallout("AudioListenerCallout");
+        return false;
     }
 
     void ShowCallout(string key)
@@ -274,18 +280,16 @@ public class P1Manager : MonoBehaviour
             visibilityCallout.SetCalloutVisibility(key, false);
     }
 
-    IEnumerator FadeOutLoopAudio()
+    void OnTriggerClipFinished()
     {
-        float startVolume = loopAudioSource.volume;
-        float elapsed = 0f;
-        while (elapsed < fadeOutDuration)
-        {
-            loopAudioSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeOutDuration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        loopAudioSource.Stop();
-        loopAudioSource.volume = startVolume;
+        ShowCallout("AudioClipCallout");
+        ShowCallout("AudioSourceCallout");
+    }
+
+    void OnSuccessClipFinished()
+    {
+        successClipFinished = true;
+        ShowCallout("AudioListenerCallout");
     }
 
     public bool IsPuzzleCompleted => puzzleCompleted;

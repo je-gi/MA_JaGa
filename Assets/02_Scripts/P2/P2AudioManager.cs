@@ -17,17 +17,17 @@ public class P2AudioManager : MonoBehaviour
     [Header("Allgemein")]
     public AudioSource audioSource;
 
-    [Header("Einzelobjekt mit einmaligem Grab-Sound")]
+    [Header("Single Grab-Sound")]
     public GameObject singleGrabObject;
     public AudioClip singleGrabAudio;
     private bool singleGrabPlayed = false;
 
-    [Header("Liste von Objekten (z.B. Dokumente)")]
-    public List<GameObject> documentObjects = new List<GameObject>();
+    [Header("Eyes")]
+    public List<GameObject> eyeObjects = new List<GameObject>();
     public AudioClip firstDocumentGrabAudio;
     private bool documentGrabAudioPlayed = false;
 
-    [Header("Trigger & Dokument-Trigger-Audio")]
+    [Header("First Eye in Trigger")]
     public TriggerNotifier triggerNotifier;
     public AudioClip firstTriggerAudio;
     public AudioClip secondTriggerAudio;
@@ -37,11 +37,11 @@ public class P2AudioManager : MonoBehaviour
     [Header("Sockets mit Audio bei erster Befüllung")]
     public List<SocketAudioPair> socketAudioPairs = new List<SocketAudioPair>();
 
-    [Header("Callout Steuerung")]
+    [Header("Callout Visibility")]
     public VisibilityCallout visibilityCallout;
     public XRSocketInteractor glassesSocket;
 
-    [Header("Puzzle Manager Referenz")]
+    [Header("Puzzle Manager")]
     public P2Manager puzzleManager;
 
     private bool callout3DObjectsShown = false;
@@ -66,7 +66,7 @@ public class P2AudioManager : MonoBehaviour
 
         if (!documentGrabAudioPlayed)
         {
-            foreach (var doc in documentObjects)
+            foreach (var doc in eyeObjects)
             {
                 if (IsGrabbed(doc))
                 {
@@ -84,7 +84,6 @@ public class P2AudioManager : MonoBehaviour
             }
         }
 
-        // === 3DObjects Callout ===
         if (puzzleManager != null && puzzleManager.IsPuzzleCompleted && !puzzleCompletedHandled)
         {
             if (callout3DObjectsShown)
@@ -93,7 +92,7 @@ public class P2AudioManager : MonoBehaviour
                 callout3DObjectsShown = false;
             }
 
-            puzzleCompletedHandled = true; // blockt weitere Anzeige
+            puzzleCompletedHandled = true;
         }
         else if (!hasShown3DObjectsCallout && glassesSocket != null && glassesSocket.hasSelection && !puzzleCompletedHandled)
         {
@@ -114,7 +113,7 @@ public class P2AudioManager : MonoBehaviour
 
     private void HandleTriggerEnter(GameObject enteredObject)
     {
-        if (documentObjects.Contains(enteredObject) && !alreadyTriggered.Contains(enteredObject))
+        if (eyeObjects.Contains(enteredObject) && !alreadyTriggered.Contains(enteredObject))
         {
             alreadyTriggered.Add(enteredObject);
             documentsInTrigger++;

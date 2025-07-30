@@ -7,25 +7,23 @@ using System.Collections.Generic;
 
 public class P3Manager : MonoBehaviour
 {
+    [Header("Trigger Zone")]
+    public Collider triggerZone;
+    public Transform PlayerCamera;
+
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip startAudioClip;
     public AudioClip completionAudioClip;
     public AudioClip triggerAreaAudioClip;
 
-    [Header("Trigger Zone")]
-    public Collider triggerZone;
-
-    [Header("Camera (VR)")]
-    public Transform vrCameraTransform;
-
-    [Header("Socket Checker")]
+    [Header("Sockets")]
     public DisableGrabAndMakeKinematicOnSocket disableGrabAndMakeKinematicOnSocket;
 
-    [Header("Timing Settings")]
+    [Header("Timing")]
     public float startAudioDelaySeconds = 2.0f;
 
-    [Header("Grabbable Objekte (werden nach Intro aktiv)")]
+    [Header("Objects to activate after Intro")]
     public List<GameObject> objectsToManage;
 
     [Header("Debug")]
@@ -120,7 +118,7 @@ public class P3Manager : MonoBehaviour
 
     private bool IsCameraInTrigger()
     {
-        return vrCameraTransform != null && triggerZone != null && triggerZone.bounds.Contains(vrCameraTransform.position);
+        return PlayerCamera != null && triggerZone != null && triggerZone.bounds.Contains(PlayerCamera.position);
     }
 
     private void PlayTriggerAreaAudio()

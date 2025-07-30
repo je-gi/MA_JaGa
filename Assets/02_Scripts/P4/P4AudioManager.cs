@@ -7,22 +7,28 @@ public class P4AudioManager : MonoBehaviour
 {
     public AudioSource audioSource;
 
+    [Header("Sockets H1")]
     public XRSocketInteractor h1s1;
     public XRSocketInteractor h1s2;
     public XRSocketInteractor h1s3;
     public XRSocketInteractor h1s4;
 
+    [Header("Sockets H2")]
     public XRSocketInteractor h2s1;
     public XRSocketInteractor h2s2;
     public XRSocketInteractor h2s3;
 
+    [Header("Socket robot")]
     public XRSocketInteractor robotSocket;
 
+    [Header("Audio H1")]
     public AudioClip h1s1FilledAudio;
     public AudioClip h1s2FilledAudio;
     public AudioClip h1s3FilledAudio;
     public AudioClip h1SpawnAudio1;
     public AudioClip h1SpawnAudio2;
+
+    [Header("Audio H2")]
     public AudioClip h2s1FilledAudio;
     public AudioClip h2s2FilledAudio;
     public AudioClip h2s3FilledAudio;
