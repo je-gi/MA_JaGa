@@ -4,7 +4,7 @@
 
 ---
 
-## 📺 Trailer
+## Trailer
 
 <div align="center">
   <a href="https://www.youtube.com/watch?v=Fe8wpY1ohD4" target="_blank">
@@ -12,11 +12,3 @@
   </a>
 </div>
 
----
-
-## ⚙️ Technologien
-
-- Unity 6000.0.38f1
-- VR Core Template
-- XR Interaction Toolkit 3.2.0
-- Blender & Illustrator (für Assets)
